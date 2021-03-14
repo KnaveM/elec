@@ -3,8 +3,9 @@ from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
 class Role(db.Model):
+    "用户角色"
     __tablename__ = 'roles'
-    __table_args__ = {'mysql_collate': 'utf8_general_ci'}
+    __table_args__ = {'mysql_collate': 'utf8_general_ci'}  # 设置编码utf8
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False,
@@ -17,7 +18,7 @@ class Role(db.Model):
 
 # 用户
 class User(UserMixin, db.Model):
-    '用户认证, 用户资料, 论坛, 游戏'
+    '用户'
     __tablename__ = 'users'
     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
     id = db.Column(db.Integer, primary_key=True)  # id

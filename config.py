@@ -1,4 +1,5 @@
 import os
+import sys
 
 class Config:
     # 数据库配置
@@ -9,7 +10,7 @@ class Config:
     SECRET_KEY = 'password'  # TODO: 设置一个密码
     ANTI_MAIL_SUBJECT_PREFIX = '[]'
     # ANTI_MAIL_SENDER = 'Anti Admin <admin@anti.com>'
-    ANTI_MAIL_SENDER = "Admin<@qq.com>"  # TODO: 信息中的sender和发件者设置为不同的地址
+    ANTI_MAIL_SENDER = "Admin<@elec.com>"  # TODO: 信息中的sender和发件者设置为不同的地址
     ANTI_ADMIN = "Admin"  # os.environ.get('ANTI_ADMIN')
 
     @staticmethod
@@ -18,7 +19,7 @@ class Config:
    
 
 class DevelopmentConfig(Config):
-    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/elec'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/elec'  #默认3306端口
     DEBUG = True
     # 邮箱配置
     ANTI_ADMIN = ''
@@ -34,12 +35,12 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/anti'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/elev'
 
 
 class ProductionConfig(Config):
     AI_PATH = ""
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/anti'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost/elev'
 
 
 config_dict = {

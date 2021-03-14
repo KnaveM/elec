@@ -20,7 +20,7 @@ db = SQLAlchemy()
 
 
 def create_app(config_name='default'):
-    print(config_name)
+    print('using config: ', config_name)
     app = Flask(__name__)
     app.config.from_object(config_dict[config_name])
     config_dict[config_name].init_app(app)
