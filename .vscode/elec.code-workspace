@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"python.pythonPath": "/root/anaconda3/envs/elec/bin/python"
+	}
+}
