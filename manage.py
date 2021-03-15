@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/root/anaconda3/envs/elec/bin/python
 import sys
 from flask_script import Manager, Shell, Server
 from flask_migrate import Migrate, MigrateCommand
@@ -40,7 +40,7 @@ class SocketioServer(Server):
 
         # socketio.run(app, host=host, port=port, **self.server_options)
 
-manager.add_command('run', Server(host='0.0.0.0', port=1000))
+manager.add_command('run', Server(host='0.0.0.0', port=80))
 # manager.add_command('runserver', SocketioServer(host='0.0.0.0', port=80))
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)  # 转移数据库用
