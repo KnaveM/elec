@@ -1,10 +1,9 @@
-#!/root/anaconda3/envs/elec/bin/python
 import sys
 from flask_script import Manager, Shell, Server
 from flask_migrate import Migrate, MigrateCommand
 
 from app import create_app, db #, socketio
-# from app.models import Role, User, Game, Player, Match, AI, MatchPlayer
+from app.models import User
 
 
 app = create_app()
@@ -13,7 +12,7 @@ migrate = Migrate(app, db)
 
 
 def make_shell_context():
-    return dict(app=app, db=db)
+    return dict(app=app, db=db, User=User)
 
 
 # TODO: 启动socketio

@@ -14,9 +14,9 @@ moment = Moment()
 db = SQLAlchemy()
 # socketio = SocketIO()  # TODO: socketio配置
 
-# login_manager = LoginManager()
-# login_manager.session_protection = 'strong'
-# login_manager.login_view = 'auth.login'  # 用户请求了login_require的页面会被跳转到的页面
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'auth.login'  # 用户请求了login_require的页面会被跳转到的页面
 
 
 def create_app(config_name='default'):
@@ -29,7 +29,7 @@ def create_app(config_name='default'):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
-    #login_manager.init_app(app)
+    login_manager.init_app(app)
     #socketio.init_app(app=app)
 
     # TODO: jinja2 环境变量设置
