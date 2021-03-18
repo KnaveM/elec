@@ -37,5 +37,9 @@ def create_app(config_name='default'):
     # 将蓝图添加到app实例中
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    from .back import back as back_blueprint
+    app.register_blueprint(back_blueprint, url_prefix='/back')
     
     return app

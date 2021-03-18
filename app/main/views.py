@@ -4,6 +4,5 @@ from . import main
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    print(request)
-    return 'successs'
-
+	"主页 显示不同的厂商" # TODO: main page
+	return render_template('index.html')
