@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo, ValidationError
 
 from ..models import User
@@ -29,3 +29,39 @@ class RegistrationForm(FlaskForm):
 	def validate_username(self, field):
 		if User.query.filter_by(username=field.data).first():
 			raise ValidationError("用户名已注册，请使用另一个")
+
+class EditUserInfoForm(FlaskForm):
+	email = StringField("邮箱:", validators=[Required(), Length(1,64), Email()])
+	name = StringField("姓名:", validators=[Required(), Length(2,64, "请输入正确的姓名，以身份证为准")])
+	address = StringField("地址:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
+	phone = StringField("电话:", validators=[Required()])
+	submit = SubmitField("保存")
+
+
+class StoreInfoForm(FlaskForm):
+	name = StringField("名称:", validators=[Required(), Length(2,64, "请输入正确的姓名")])
+	address = StringField("地址:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
+	contact = StringField("联系人:", validators=[Required()])
+	phone = StringField("电话:", validators=[Required()])
+	submit = SubmitField("保存")
+
+class FactoryInfoForm(FlaskForm):
+	name = StringField("名称:", validators=[Required(), Length(2,64, "请输入正确的姓名")])
+	address = StringField("地址:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
+	contact = StringField("联系人:", validators=[Required()])
+	phone = StringField("电话:", validators=[Required()])
+	complaint_department = StringField("投诉部门", validators=[Required()])
+	complaint_method = StringField("投诉方式", validators=[Required()])
+	submit = SubmitField("保存")
+
+class ProductForm(FlaskForm):
+	name = StringField("名称:", validators=[Required(), Length(2,64, "请输入正确的姓名")])
+	version = StringField("版本:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
+	description = StringField("描述:", validators=[Required()])
+	comment = StringField("备注:", validators=[Required()])
+	factory = SelectField("工厂:")
+	submit = SubmitField("保存")
+
+	def __init__(self, choices, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.factory.choices = choices

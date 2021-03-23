@@ -13,6 +13,7 @@ def initdb():
 	"初始化数据库"
 	db.drop_all()
 	db.create_all()
+	Role.init_roles()
 	a = User(username='aa')
 	db.session.add(a)
 	db.session.commit()

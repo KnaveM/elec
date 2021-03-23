@@ -3,5 +3,58 @@
 {% block title %}{{user.username}}个人信息{% endblock %}
 
 {% block page_content %}
-<h1>{{ current_user.username }}</h1>
+<h1>{{ user.username }}</h1>
+<p>{{ user.user_info.email }}</p>
+<p>{{ user.user_info.name }}</p>
+<p>{{ user.user_info.address }}</p>
+<p>{{ user.user_info.phone }}</p>
+<a href="{{ url_for('auth.edit_user_info') }}">修改信息</a>
+
+{% if current_user == user %}
+<h1>物业</h1>
+<table class="table">
+	<thead>
+		<th>名称</th><th>地址</th><th>联系人</th><th>电话</th><th><a href="{{ url_for('auth.addstore') }}">添加</a></th>
+	</thead>
+	<tbody>
+		{% for store in current_user.stores %}
+		<tr><td>{{ store.name }}</td><td>{{ store.address }}</td><td>{{ store.contact }}</td><td>{{ store.phone }}</td><td><a href="{{ url_for('auth.editstore', id=store.id) }}">修改</a></td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<!-- TODO: 订单 -->
+
+<!-- 工厂 -->
+<h1>工厂</h1>
+<table class="table">
+	<thead>
+		<th>名称</th><th>地址</th><th>联系人</th><th>电话</th><th>投诉部门</th><th>投诉方式</th><th><a href="{{ url_for('auth.addfactory') }}">添加</th>
+	</thead>
+	<tbody>
+		{% for factory in current_user.factorys %}
+		<tr><td>{{ factory.name }}</td><td>{{ factory.address }}</td><td>{{ factory.contact }}</td><td>{{ factory.phone }}</td><td>{{ factory.complaint_department }}</td><td>{{ factory.complaint_method }}</td><td><a href="{{ url_for('auth.editfactory', id=factory.id) }}">修改</a></td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<!-- 产品 -->
+<h1>产品</h1>
+<table class="table">
+	<thead>
+		<th>名称</th><th>版本</th><th>描述</th><th>备注</th><th>工厂</th><th><a href="{{ url_for('auth.addproduct') }}">添加</th>
+	</thead>
+	<tbody>
+		{% for factory in current_user.factorys %}
+		{% for product in factory.products %}
+		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td><a href="{{ url_for('auth.editproduct', id=product.id) }}">修改</a></td></tr>
+		{% endfor %}
+		{% endfor %}
+	</tbody>
+</table>
+
+<!-- 统计报表 -->
+
+{% endif %}
+
 {% endblock %}
