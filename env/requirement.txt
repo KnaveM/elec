@@ -4,10 +4,8 @@ backcall==0.2.0
 bidict==0.21.2
 blinker==1.4
 certifi==2020.12.5
-cffi @ file:///tmp/build/80754af9/cffi_1613246945912/work
 chardet==4.0.0
 click==7.1.2
-cryptography @ file:///tmp/build/80754af9/cryptography_1615532411702/work
 decorator==4.4.2
 dnspython==2.1.0
 dominate==2.6.0
@@ -38,7 +36,6 @@ pexpect==4.8.0
 pickleshare==0.7.5
 prompt-toolkit==3.0.17
 ptyprocess==0.7.0
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
 Pygments==2.8.1
 PyMySQL==1.0.2
 pyOpenSSL==20.0.1

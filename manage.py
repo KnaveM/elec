@@ -13,30 +13,26 @@ def initdb():
 	"初始化数据库"
 	db.drop_all()
 	db.create_all()
-	Role.init_roles()
-	a = User(username='aa')
-	db.session.add(a)
+	u = User(username="test", password="testtest")
+	db.session.add(u)
 	db.session.commit()
-	ai = UserInfo(email="testa@test.com", name='zhang', phone='+86-18866667777', address="daheishan", user_id=a.id)
-	db.session.add(ai)
-	db.session.commit()
-	si = StoreInfo(name='teststore', address='daheishanjiao', contact="zhangsan", phone="+86-18766665555", user_id=a.id)
-	db.session.add(si)
-	db.session.commit()
-	fi = FactoryInfo(name='良心工厂', address='大黑山顶', contact='李四', phone='+86-18711112222', complaint_department="12319", complaint_method="请拨打12319", user_id=a.id)
-	db.session.add(fi)
+	ui = UserInfo(email="testa@test.com", name='zhang', phone='+86-18866667777', address="daheishan", user_id=u.id)
+	db.session.add(ui)
 	db.session.commit()
 
-	pa = Product(name='卫龙辣条', version="?", description="好吃", comment="备注", factory_id=fi.id)
-	pb = Product(name="波士顿红茶", version='1.0', description="好喝", comment="暂无", factory_id=fi.id)
-	db.session.add(pa)
-	db.session.add(pb)
+	si = StoreInfo(u, name='teststore', address='daheishanjiao', contact="zhangsan", phone="18766665555")
+	db.session.add(si)
 	db.session.commit()
 	
-	import datetime
-	o = Order(money=998, deadline=datetime.datetime.utcnow())
-	db.session.add(o)
+	fi = FactoryInfo(u, name='testfactory', address='testaddress', contact='lisi', phone='19711112222', complaint_department='department', complaint_method='method')
+	db.session.add(fi)
 	db.session.commit()
+	# fi = FactoryInfo()
+	
+	# import datetime
+	# o = Order(money=998, deadline=datetime.datetime.utcnow())
+	# db.session.add(o)
+	# db.session.commit()
 
 
 def make_shell_context():

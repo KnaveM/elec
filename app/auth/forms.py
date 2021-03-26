@@ -65,3 +65,4 @@ class ProductForm(FlaskForm):
 	def __init__(self, choices, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.factory.choices = choices
+

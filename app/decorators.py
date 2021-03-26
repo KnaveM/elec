@@ -4,11 +4,11 @@ from flask_login import current_user
 
 from .models import User
 
-def permission_required(permission, error_page=None):
+def permission_required(role, error_page=None):
 	def decorator(f):
 		@wraps(f)
 		def decorated_function(*args, **kwargs):
-			if not current_user.can(permission):
+			if not current_user.can(role):
 				if error_page is None:
 					abort(403)
 				else:
@@ -17,8 +17,8 @@ def permission_required(permission, error_page=None):
 		return decorated_function
 	return decorator
 
-def store_required(f):
-	return permission_required(User.ORDINARY_USER|User.STORE_OWNER)(f)
+# def store_required(f):
+# 	return permission_required(User.ORDINARY_USER|User.STORE_OWNER)(f)
 
-def factory_required(f):
-	return permission_required(User.ORDINARY_USER|User.FACTORY_OWNER)(f)
+# def factory_required(f):
+# 	return permission_required(User.ORDINARY_USER|User.FACTORY_OWNER)(f)

@@ -10,20 +10,52 @@
 <p>{{ user.user_info.phone }}</p>
 <a href="{{ url_for('auth.edit_user_info') }}">修改信息</a>
 
+
+<!-- TODO: 下面的全部都迁移到后台页面中 -->
+
 {% if current_user == user %}
+
+{% if current_user.master_id %}
+<!-- 空 -->
+{% else %}
+<h1>下属</h1>
+<table class="table">
+	<thead>
+	<tr>
+		<th>下属</th><th>姓名</th><th>email</th><th>电话</th><th><a href="{{ url_for('auth.add_subordinate') }}">添加</a></th>
+	</tr>
+	</thead>
+	<tbody>
+		{% for sub in current_user.subordinates %}
+		<tr>
+			<td>{{sub.username}}</td>
+			<td>{{ sub.user_info.name }}</td>
+			<td>{{ sub.user_info.email }}</td>
+			<td>{{ sub.user_info.phone }}</td>
+			<td> <a href="{{url_for("auth.delete_subordinate", id=sub.id)}}">删除</a> </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endif %}
+
+
 <h1>物业</h1>
 <table class="table">
 	<thead>
 		<th>名称</th><th>地址</th><th>联系人</th><th>电话</th><th><a href="{{ url_for('auth.addstore') }}">添加</a></th>
 	</thead>
 	<tbody>
-		{% for store in current_user.stores %}
-		<tr><td>{{ store.name }}</td><td>{{ store.address }}</td><td>{{ store.contact }}</td><td>{{ store.phone }}</td><td><a href="{{ url_for('auth.editstore', id=store.id) }}">修改</a></td></tr>
+		{% for role in current_user.roles %}
+		{% if role.permissions==Permission.STORE_OWNER or role.permissions==Permission.STORE_STAFF %}
+		<tr><td>{{ role.store.name }}</td><td>{{ role.store.address }}</td><td>{{ role.store.contact }}</td><td>{{ role.store.phone }}</td><td><a href="{{ url_for('auth.editstore', id=role.store.id) }}">修改</a></td></tr>
+		<!-- <tr><td colspan="100%"></td></tr> -->
+		{% endif %}
 		{% endfor %}
 	</tbody>
 </table>
 
-<!-- TODO: 订单 -->
 
 <!-- 工厂 -->
 <h1>工厂</h1>
@@ -32,8 +64,10 @@
 		<th>名称</th><th>地址</th><th>联系人</th><th>电话</th><th>投诉部门</th><th>投诉方式</th><th><a href="{{ url_for('auth.addfactory') }}">添加</th>
 	</thead>
 	<tbody>
-		{% for factory in current_user.factorys %}
-		<tr><td>{{ factory.name }}</td><td>{{ factory.address }}</td><td>{{ factory.contact }}</td><td>{{ factory.phone }}</td><td>{{ factory.complaint_department }}</td><td>{{ factory.complaint_method }}</td><td><a href="{{ url_for('auth.editfactory', id=factory.id) }}">修改</a></td></tr>
+		{% for role in current_user.roles %}
+		{% if role.permissions==Permission.FACTORY_OWNER%}
+		<tr><td>{{ role.factory.name }}</td><td>{{ role.factory.address }}</td><td>{{ role.factory.contact }}</td><td>{{ role.factory.phone }}</td><td>{{ role.factory.complaint_department }}</td><td>{{ role.factory.complaint_method }}</td><td><a href="{{ url_for('auth.editfactory', id=role.factory.id) }}">修改</a></td></tr>
+		{% endif %}
 		{% endfor %}
 	</tbody>
 </table>
@@ -42,16 +76,24 @@
 <h1>产品</h1>
 <table class="table">
 	<thead>
-		<th>名称</th><th>版本</th><th>描述</th><th>备注</th><th>工厂</th><th><a href="{{ url_for('auth.addproduct') }}">添加</th>
+		<th>名称</th><th>版本</th><th>描述</th><th>备注</th><th>工厂</th><th><a href="{{ url_for('back.add_product') }}">添加</th>
 	</thead>
 	<tbody>
-		{% for factory in current_user.factorys %}
+		{% for role in current_user.roles %}
+		{% if role.permissions==Permission.FACTORY_OWNER or role.permissions==Permission.FACTORY_PRODUCT_MANAGER %}
+		{% for factory in [role.factory] %}
 		{% for product in factory.products %}
-		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td><a href="{{ url_for('auth.editproduct', id=product.id) }}">修改</a></td></tr>
+		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td><a href="{{ url_for('back.edit_product', id=product.id) }}">修改</a>
+			<a href="{{ url_for('back.delete_product', id=product.id) }}">删除</a>
+		</td></tr>
 		{% endfor %}
+		{% endfor %}
+		{% endif %}
 		{% endfor %}
 	</tbody>
 </table>
+
+<!-- TODO: 订单 -->
 
 <!-- 统计报表 -->
 
