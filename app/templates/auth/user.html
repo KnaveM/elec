@@ -8,7 +8,7 @@
 <p>{{ user.user_info.name }}</p>
 <p>{{ user.user_info.address }}</p>
 <p>{{ user.user_info.phone }}</p>
-<a href="{{ url_for('auth.edit_user_info') }}">修改信息</a>
+<a href="{{ url_for('auth.edit_user_info', id=user.id) }}">修改信息</a>
 
 
 <!-- TODO: 下面的全部都迁移到后台页面中 -->
@@ -32,7 +32,8 @@
 			<td>{{ sub.user_info.name }}</td>
 			<td>{{ sub.user_info.email }}</td>
 			<td>{{ sub.user_info.phone }}</td>
-			<td> <a href="{{url_for("auth.delete_subordinate", id=sub.id)}}">删除</a> </td>
+			<td> <p><a href="{{url_for("auth.delete_subordinate", id=sub.id)}}">删除</a></p>
+			<p><a href="{{url_for('auth.edit_user_info', id=sub.id)}}">修改</a></p> </td>
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -83,8 +84,10 @@
 		{% if role.permissions==Permission.FACTORY_OWNER or role.permissions==Permission.FACTORY_PRODUCT_MANAGER %}
 		{% for factory in [role.factory] %}
 		{% for product in factory.products %}
-		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td><a href="{{ url_for('back.edit_product', id=product.id) }}">修改</a>
+		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td>
+			<a href="{{ url_for('back.edit_product', id=product.id) }}">修改</a>
 			<a href="{{ url_for('back.delete_product', id=product.id) }}">删除</a>
+			<a href="{{ url_for('back.cart_add_product', id=product.id) }}">添加到购物车</a>
 		</td></tr>
 		{% endfor %}
 		{% endfor %}

@@ -53,6 +53,7 @@ def edit_product(id):
 		p.factory_id = form.factory.data
 		db.session.add(fi)
 		db.session.commit()
+		flash("修改产品信息成功")
 	return render_template("/auth/factory_info.html", form=form)
 
 @back.route('/deleteproduct/<int:id>')
@@ -61,15 +62,23 @@ def delete_product(id):
 	if p is None:
 		flash("无此项产品")
 		return redirect(url_for('auth.user', id=current_user.id))
-	db.session.delete(p)
+	p.delete()
+	# db.session.delete(p)
 	db.session.commit()
+	flash('删除产品成功')
 	return redirect(url_for('auth.user', id=current_user.id))
 
 
 
 
 # MARK: 订单管理
-@back.route('/cart/addproduct')
-def cart_add_product():
+@back.route('/cart/addproduct/<int:id>')
+def cart_add_product(id):
 	"向购物车添加产品"
-	pass
+	p = Product.query.filter_by(id=id).first()
+	if p is None:
+		flash("无法添加到购物车, 无此产品")
+		return redirect(url_for('auth.user', id=current_user.id))
+	current_user.add_to_cart(p)
+	db.session.commit()
+	return redirect(url_for('auth.user', id=current_user.id))

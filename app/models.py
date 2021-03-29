@@ -1,3 +1,4 @@
+from flask.globals import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -83,6 +84,10 @@ class Cart(db.Model):
 	# 外键
 	store_id = db.Column(db.Integer, db.ForeignKey("store_infos.id")) # 目的地
 
+	@staticmethod
+	def _delete_product(product):
+		ps = Cart.query.filter_by(product_id=product.id).all()
+		[db.session.delete(p) for p in ps]
 
 class Product(db.Model):
 	'产品信息'
@@ -108,6 +113,10 @@ class Product(db.Model):
 		db.session.add(self)
 		db.session.flush()
 
+	def delete(self):
+		# 先删除外键
+		Cart._delete_product(self)
+		db.session.delete(self)
 
 class UserInfo(db.Model):
 	'用户信息'
@@ -127,6 +136,11 @@ class UserInfo(db.Model):
 
 	def __repr__(self):
 		return "<UserInfo {} email:{}>".format(self.id, self.email)
+
+	def __init__(self, user, *args, **kwargs) -> None:
+		super().__init__(*args, **kwargs)
+		self.user_id = user.id
+		db.session.add(self)
 
 class StoreInfo(db.Model):
 	'相当于送货地址 物业 中间商 代理 销售'
@@ -305,18 +319,48 @@ class User(db.Model, UserMixin):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 	
+	# MARK: 购物车
 	def add_to_cart(self, p, count=1):
-		c = Cart(user_id=self.id, product_id=p.id, count=count)
-		self.cart_products.append(c)
+		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
+		if c is None:
+			c = Cart(user_id=self.id, product_id=p.id, count=count)
+			self.cart_products.append(c)
+		else:
+			c.count += count
+			db.session.add(c)
+		db.session.add(self)
 
 	def edit_cart_product(self, p, count):
 		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
 		c.count=count
 
+	# MARK: 下属管理
+	def add_subordinate(self, new_user):
+		# check 权限
+		if self.master_id is not None:
+			return -1
+		new_user.master_id = self.id
+		db.session.add(new_user)
+		return 0
+	
+	def delete_subordinate(self, sub):
+		# check TODO: 删除要怎么写
+		if sub not in self.subordinates:
+			return -1
+		db.session.delete(sub.user_info) # 先删除外键
+		self.subordinates.remove(sub)
+		db.session.add(self)
+
+	def update_subordinate_role(self, sub, role):
+		# TODO: 修改自账户权限
+		pass
+
+	# MARK: 用户登陆
 	def can(self, role:Role):
 		'用户权限认证'
 		return role in self.roles # 如果有这个角色
-		
+	
+
 
 	@property
 	def passwrod(self):

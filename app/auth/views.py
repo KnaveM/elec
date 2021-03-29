@@ -15,6 +15,11 @@ def before_app_request():
 	pass
 	#return render_template('base.html')
 
+@auth.route('/user')
+@login_required
+def user_self_page():
+	return redirect(url_for('auth.user', id=current_user.id))
+
 @auth.route('/user/<username>')
 def get_user_by_name(username):
 	user = User.query.filter_by(username=username).first()
@@ -30,19 +35,30 @@ def user(id):
 		abort(404)  # TODO: 未找到该用户
 	return render_template('/auth/user.html', user=user)
 
-@auth.route('/editinfo', methods=['GET', 'POST'])
+@auth.route('/editinfo')
 @login_required
-def edit_user_info():
-	form = EditUserInfoForm(email=current_user.user_info.email, name=current_user.user_info.name, address=current_user.user_info.address, phone=current_user.user_info.phone)
+def edit_self_user_info():
+	"修改自己的用户信息"
+	return redirect(url_for('auth.edit_user_info', id=current_user.id))
+
+@auth.route('/editinfo/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_user_info(id):
+	"修改用户信息"
+	u = User.query.filter_by(id=id).first()
+	if not (current_user.id == u.id or current_user.id == u.master_id):
+		flash("无此权限")
+		return redirect(url_for('auth.user', id=current_user.id))
+	form = EditUserInfoForm(email=u.user_info.email, name=u.user_info.name, address=u.user_info.address, phone=u.user_info.phone)
 	if form.validate_on_submit():
-		ui = current_user.user_info
+		ui = u.user_info
 		ui.email = form.email.data
 		ui.name = form.name.data
 		ui.address = form.address.data
 		ui.phone = form.phone.data
 		db.session.add(ui)
 		db.session.commit()
-		return redirect(url_for('auth.user', id=current_user.id))
+		return redirect(url_for('auth.user', id=u.id))
 	return render_template('/auth/edit_user_info.html', form=form)
 
 @auth.route('/addstore', methods=['GET', 'POST'])
@@ -153,12 +169,11 @@ def add_subordinate():
 	# form
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(username=form.username.data, password=form.password.data, master_id=current_user.id)
-		db.session.add(user)
+		user = User(username=form.username.data, password=form.password.data)
+		current_user.add_subordinate(user)
 		db.session.flush() # flush 获取user.id
 		
-		userinfo = UserInfo(email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data, user_id=user.id)
-		db.session.add(userinfo)
+		userinfo = UserInfo(user, email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data)
 		db.session.commit()
 		return redirect(url_for('auth.user', id=current_user.id))
 	return render_template("auth/register.html", form=form)
@@ -176,6 +191,8 @@ def delete_subordinate(id):
 		flash("只能删除主账户中的子账户")
 		return redirect(url_for('back.index'))
 	
+	sub.master.subordinates.remove(sub)
+	db.session.commit()
 	# form
-
-	return "TODO"
+	flash("删除子账户成功")
+	return redirect(url_for('auth.user', id=current_user.id))
