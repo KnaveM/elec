@@ -10,23 +10,44 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 
 def initdb():
-	"初始化数据库"
-	db.drop_all()
-	db.create_all()
-	u = User(username="test", password="testtest")
-	db.session.add(u)
-	db.session.commit()
-	ui = UserInfo(email="testa@test.com", name='zhang', phone='+86-18866667777', address="daheishan", user_id=u.id)
-	db.session.add(ui)
-	db.session.commit()
+    "初始化数据库"
+    db.drop_all()
+    db.create_all()
+    u = User(username="test", password="testtest")
+    db.session.add(u)
+    db.session.commit()
+    ui = UserInfo(email="testa@test.com", name='zhang',
+                    phone='+86-18866667777', address="daheishan", user_id=u.id)
+    db.session.add(ui)
+    db.session.commit()
 
-	si = StoreInfo(u, name='teststore', address='daheishanjiao', contact="zhangsan", phone="18766665555")
-	db.session.add(si)
-	db.session.commit()
-	
-	fi = FactoryInfo(u, name='testfactory', address='testaddress', contact='lisi', phone='19711112222', complaint_department='department', complaint_method='method')
-	db.session.add(fi)
-	db.session.commit()
+    si = StoreInfo(u, name='teststore', address='daheishanjiao',
+                    contact="zhangsan", phone="18766665555")
+    db.session.add(si)
+    db.session.commit()
+    fi = FactoryInfo(u, name='testfactory', address='testaddress', contact='lisi', phone='19711112222', complaint_department='department', complaint_method='method')
+    db.session.add(fi)
+    db.session.commit()
+    p1 = Product(fi, name="testp1")
+    db.session.add(p1)
+    p2 = Product(fi, name="testp2")
+    db.session.add(p2)
+    p3 = Product(fi, name="testp3")
+    db.session.add(p3)
+    p4 = Product(fi, name="testp4")
+    db.session.add(p4)
+    p5 = Product(fi, name="testp5")
+    db.session.add(p5)
+    db.session.commit()
+
+
+    # test code
+    u = User.query.first()
+    ps = Product.query.all()
+    [u.add_to_cart(p) for p in ps]
+    db.session.add(u)
+    db.session.commit()
+
 	# fi = FactoryInfo()
 	
 	# import datetime

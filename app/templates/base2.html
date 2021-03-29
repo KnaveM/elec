@@ -1,0 +1,1651 @@
+<html {% block html_attribs %} lang="en" {% endblock %}>
+
+<head>
+    {% block metas %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock %}
+    <title>{% block title %} base {% endblock %}</title>
+    <link href="static/assets/css/lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/chartist/chartist.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/themify-icons.css" rel="stylesheet">
+    <link href="static/assets/css/lib/owl.carousel.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/owl.theme.default.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/weather-icons.css" rel="stylesheet">
+    <link href="static/assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="static/assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="static/assets/css/lib/helper.css" rel="stylesheet">
+    <link href="static/assets/css/style.css" rel="stylesheet">
+    {% block styles %}
+    <!-- Styles -->
+    <style type="text/css">
+        .jqstooltip {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            visibility: hidden;
+            background: rgb(0, 0, 0) transparent;
+            background-color: rgba(0, 0, 0, 0.6);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+            white-space: nowrap;
+            padding: 5px;
+            border: 1px solid white;
+            z-index: 10000;
+        }
+
+        .jqsfield {
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+        }
+    </style>
+    {% endblock %}
+    <script async="" src="https://query.yahooapis.com/v1/public/yql?format=json&amp;rnd=2021259&amp;diagnostics=true&amp;callback=jQuery1120046752499116769686_1616723001316&amp;q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text=%22Dhaka%22)%20and%20u=%22f%22&amp;_=1616723001317"></script>
+
+</head>
+<body class="pace-done">
+    <!-- 开场动画 -->
+    <div class="pace  pace-inactive">
+        <div class="pace-progress" data-progress-text="100%" data-progress="99"
+            style="transform: translate3d(100%, 0px, 0px);">
+            <div class="pace-progress-inner"></div>
+        </div>
+        <div class="pace-activity"></div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+        <div class="nano has-scrollbar">
+            <div class="nano-content active" tabindex="0" style="right: -17px;">
+                <ul class="d-block">
+                    <div class="logo"><a href="index.html"><!-- <img src="static/assets/images/logo.png" alt="" /> --><span>Focus</span></a></div>
+                    <li class="label">Main</li>
+                    <li class="active"><a class="sidebar-sub-toggle"><i class="ti-home"></i> Dashboard <span class="badge badge-primary">2</span> <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul class="d-block">
+                            <li class="active"><a href="index.html" class="active">Dashboard 1</a></li>
+                            <li><a href="index1.html">Dashboard 2</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="label">Apps</li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-bar-chart-alt"></i>  Charts  <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="chart-flot.html">Flot</a></li>
+                            <li><a href="chart-morris.html">Morris</a></li>
+                            <li><a href="chartjs.html">Chartjs</a></li>
+                            <li><a href="chartist.html">Chartist</a></li>
+                            <li><a href="chart-peity.html">Peity</a></li>
+                            <li><a href="chart-sparkline.html">Sparkle</a></li>
+                            <li><a href="chart-knob.html">Knob</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="app-event-calender.html"><i class="ti-calendar"></i> Calender </a></li>
+                    <li><a href="app-email.html"><i class="ti-email"></i> Email</a></li>
+                    <li><a href="app-profile.html"><i class="ti-user"></i> Profile</a></li>
+                    <li><a href="app-widget-card.html"><i class="ti-layout-grid2-alt"></i> Widget</a></li>
+                    <li class="label">Features</li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-layout"></i> UI Elements <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="ui-typography.html">Typography</a></li>
+                            <li><a href="ui-alerts.html">Alerts</a></li>
+
+                            <li><a href="ui-button.html">Button</a></li>
+                            <li><a href="ui-dropdown.html">Dropdown</a></li>
+
+                            <li><a href="ui-list-group.html">List Group</a></li>
+
+                            <li><a href="ui-progressbar.html">Progressbar</a></li>
+                            <li><a href="ui-tab.html">Tab</a></li>
+
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-panel"></i> Components <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="uc-calendar.html">Calendar</a></li>
+                            <li><a href="uc-carousel.html">Carousel</a></li>
+                            <li><a href="uc-weather.html">Weather</a></li>
+                            <li><a href="uc-datamap.html">Datamap</a></li>
+                            <li><a href="uc-todo-list.html">To do</a></li>
+                            <li><a href="uc-scrollable.html">Scrollable</a></li>
+                            <li><a href="uc-sweetalert.html">Sweet Alert</a></li>
+                            <li><a href="uc-toastr.html">Toastr</a></li>
+                            <li><a href="uc-range-slider-basic.html">Basic Range Slider</a></li>
+                            <li><a href="uc-range-slider-advance.html">Advance Range Slider</a></li>
+                            <li><a href="uc-nestable.html">Nestable</a></li>
+
+                            <li><a href="uc-rating-bar-rating.html">Bar Rating</a></li>
+                            <li><a href="uc-rating-jRate.html">jRate</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-layout-grid4-alt"></i> Table <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="table-basic.html">Basic</a></li>
+
+                            <li><a href="table-export.html">Datatable Export</a></li>
+                            <li><a href="table-row-select.html">Datatable Row Select</a></li>
+                            <li><a href="table-jsgrid.html">Editable </a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-heart"></i> Icons <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="font-themify.html">Themify</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-map"></i> Maps <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="gmaps.html">Basic</a></li>
+                            <li><a href="vector-map.html">Vector Map</a></li>
+                        </ul>
+                    </li>
+                    <li class="label">Form</li>
+                    <li><a href="form-basic.html"><i class="ti-view-list-alt"></i> Basic Form </a></li>
+                    <li class="label">Extra</li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-files"></i> Invoice <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="invoice.html">Basic</a></li>
+                            <li><a href="invoice-editable.html">Editable</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="sidebar-sub-toggle"><i class="ti-target"></i> Pages <span class="sidebar-collapse-icon ti-angle-down"></span></a>
+                        <ul>
+                            <li><a href="page-login.html">Login</a></li>
+                            <li><a href="page-register.html">Register</a></li>
+                            <li><a href="page-reset-password.html">Forgot password</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="../documentation/index.html"><i class="ti-file"></i> Documentation</a></li>
+                    <li><a><i class="ti-close"></i> Logout</a></li>
+                </ul>
+            </div>
+        <div class="nano-pane"><div class="nano-slider" style="height: 487px; transform: translate(0px, 0px);"></div></div></div>
+    </div>
+
+    <!-- 首部导航栏 -->
+    <div class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="float-left">
+                        <div class="hamburger sidebar-toggle">
+                            <span class="line"></span>
+                            <span class="line"></span>
+                            <span class="line"></span>
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <i class="ti-bell"></i>
+                                <div class="drop-down dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-content-heading">
+                                        <span class="text-left">Recent Notifications</span>
+                                    </div>
+                                    <div class="dropdown-content-body">
+                                        <ul>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/3.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Mr. John</div>
+                                                        <div class="notification-text">5 members joined today </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/3.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Mariam</div>
+                                                        <div class="notification-text">likes a photo of you</div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/3.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Tasnim</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/3.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Mr. John</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="text-center">
+                                                <a href="#" class="more-link">See All</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <i class="ti-email"></i>
+                                <div class="drop-down dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-content-heading">
+                                        <span class="text-left">2 New Messages</span>
+                                        <a href="email.html">
+                                            <i class="ti-pencil-alt pull-right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-content-body">
+                                        <ul>
+                                            <li class="notification-unread">
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Michael Qin</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="notification-unread">
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/2.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Mr. John</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/3.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Michael Qin</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <img class="pull-left m-r-10 avatar-img"
+                                                        src="static/assets/images/avatar/2.jpg" alt="">
+                                                    <div class="notification-content">
+                                                        <small class="notification-timestamp pull-right">02:34 PM</small>
+                                                        <div class="notification-heading">Mr. John</div>
+                                                        <div class="notification-text">Hi Teddy, Just wanted to let you ...
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="text-center">
+                                                <a href="#" class="more-link">See All</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown dib">
+                            <div class="header-icon" data-toggle="dropdown">
+                                <span class="user-avatar">John
+                                    <i class="ti-angle-down f-s-10"></i>
+                                </span>
+                                <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-content-heading">
+                                        <span class="text-left">Upgrade Now</span>
+                                        <p class="trial-day">30 Days Trail</p>
+                                    </div>
+                                    <div class="dropdown-content-body">
+                                        <ul>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="ti-user"></i>
+                                                    <span>Profile</span>
+                                                </a>
+                                            </li>
+    
+                                            <li>
+                                                <a href="#">
+                                                    <i class="ti-email"></i>
+                                                    <span>Inbox</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="ti-settings"></i>
+                                                    <span>Setting</span>
+                                                </a>
+                                            </li>
+    
+                                            <li>
+                                                <a href="#">
+                                                    <i class="ti-lock"></i>
+                                                    <span>Lock Screen</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    <i class="ti-power-off"></i>
+                                                    <span>Logout</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 p-r-0 title-margin-right">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <h1>Hello, <span>Welcome Here</span></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                    <div class="col-lg-4 p-l-0 title-margin-left">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Home</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                </div>
+                <!-- /# row -->
+                <section id="main-content">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="ti-money color-success border-success"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Total Profit</div>
+                                        <div class="stat-digit">1,012</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="ti-user color-primary border-primary"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">New Customer</div>
+                                        <div class="stat-digit">961</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="ti-layout-grid2 color-pink border-pink"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Active Projects</div>
+                                        <div class="stat-digit">770</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="ti-link color-danger border-danger"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Referral</div>
+                                        <div class="stat-digit">2,781</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Fee Collections and Expenses</h4>
+    
+                                </div>
+                                <div class="card-body">
+                                    <div class="ct-bar-chart m-t-30"><svg
+                                            xmlns:ct="http://gionkunz.github.com/chartist-js/ct" width="100%" height="100%"
+                                            class="ct-chart-bar" style="width: 100%; height: 100%;">
+                                            <g class="ct-grids">
+                                                <line x1="50" x2="50" y1="15" y2="215" class="ct-grid ct-horizontal"></line>
+                                                <line x1="85.06041717529297" x2="85.06041717529297" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="120.12083435058594" x2="120.12083435058594" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="155.1812515258789" x2="155.1812515258789" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="190.24166870117188" x2="190.24166870117188" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="225.30208587646484" x2="225.30208587646484" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="260.3625030517578" x2="260.3625030517578" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="295.4229202270508" x2="295.4229202270508" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="330.48333740234375" x2="330.48333740234375" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="365.5437545776367" x2="365.5437545776367" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="400.6041717529297" x2="400.6041717529297" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line x1="435.66458892822266" x2="435.66458892822266" y1="15" y2="215"
+                                                    class="ct-grid ct-horizontal"></line>
+                                                <line y1="215" y2="215" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="190" y2="190" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="165" y2="165" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="140" y2="140" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="115" y2="115" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="90" y2="90" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="65" y2="65" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="40" y2="40" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                                <line y1="15" y2="15" x1="50" x2="470.7250061035156"
+                                                    class="ct-grid ct-vertical"></line>
+                                            </g>
+                                            <g>
+                                                <g class="ct-series ct-series-a">
+                                                    <line x1="57.530208587646484" x2="57.530208587646484" y1="215" y2="115"
+                                                        class="ct-bar" ct:value="5"></line>
+                                                    <line x1="92.59062576293945" x2="92.59062576293945" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                    <line x1="127.65104293823242" x2="127.65104293823242" y1="215" y2="155"
+                                                        class="ct-bar" ct:value="3"></line>
+                                                    <line x1="162.7114601135254" x2="162.7114601135254" y1="215" y2="75"
+                                                        class="ct-bar" ct:value="7"></line>
+                                                    <line x1="197.77187728881836" x2="197.77187728881836" y1="215" y2="115"
+                                                        class="ct-bar" ct:value="5"></line>
+                                                    <line x1="232.83229446411133" x2="232.83229446411133" y1="215" y2="15"
+                                                        class="ct-bar" ct:value="10"></line>
+                                                    <line x1="267.8927116394043" x2="267.8927116394043" y1="215" y2="155"
+                                                        class="ct-bar" ct:value="3"></line>
+                                                    <line x1="302.95312881469727" x2="302.95312881469727" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                    <line x1="338.01354598999023" x2="338.01354598999023" y1="215" y2="55"
+                                                        class="ct-bar" ct:value="8"></line>
+                                                    <line x1="373.0739631652832" x2="373.0739631652832" y1="215" y2="15"
+                                                        class="ct-bar" ct:value="10"></line>
+                                                    <line x1="408.1343803405762" x2="408.1343803405762" y1="215" y2="95"
+                                                        class="ct-bar" ct:value="6"></line>
+                                                    <line x1="443.19479751586914" x2="443.19479751586914" y1="215" y2="55"
+                                                        class="ct-bar" ct:value="8"></line>
+                                                </g>
+                                                <g class="ct-series ct-series-b">
+                                                    <line x1="67.53020858764648" x2="67.53020858764648" y1="215" y2="155"
+                                                        class="ct-bar" ct:value="3"></line>
+                                                    <line x1="102.59062576293945" x2="102.59062576293945" y1="215" y2="175"
+                                                        class="ct-bar" ct:value="2"></line>
+                                                    <line x1="137.65104293823242" x2="137.65104293823242" y1="215" y2="35"
+                                                        class="ct-bar" ct:value="9"></line>
+                                                    <line x1="172.7114601135254" x2="172.7114601135254" y1="215" y2="115"
+                                                        class="ct-bar" ct:value="5"></line>
+                                                    <line x1="207.77187728881836" x2="207.77187728881836" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                    <line x1="242.83229446411133" x2="242.83229446411133" y1="215" y2="95"
+                                                        class="ct-bar" ct:value="6"></line>
+                                                    <line x1="277.8927116394043" x2="277.8927116394043" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                    <line x1="312.95312881469727" x2="312.95312881469727" y1="215" y2="95"
+                                                        class="ct-bar" ct:value="6"></line>
+                                                    <line x1="348.01354598999023" x2="348.01354598999023" y1="215" y2="75"
+                                                        class="ct-bar" ct:value="7"></line>
+                                                    <line x1="383.0739631652832" x2="383.0739631652832" y1="215" y2="55"
+                                                        class="ct-bar" ct:value="8"></line>
+                                                    <line x1="418.1343803405762" x2="418.1343803405762" y1="215" y2="75"
+                                                        class="ct-bar" ct:value="7"></line>
+                                                    <line x1="453.19479751586914" x2="453.19479751586914" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                </g>
+                                                <g class="ct-series ct-series-c">
+                                                    <line x1="77.53020858764648" x2="77.53020858764648" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                    <line x1="112.59062576293945" x2="112.59062576293945" y1="215" y2="95"
+                                                        class="ct-bar" ct:value="6"></line>
+                                                    <line x1="147.65104293823242" x2="147.65104293823242" y1="215" y2="155"
+                                                        class="ct-bar" ct:value="3"></line>
+                                                    <line x1="182.7114601135254" x2="182.7114601135254" y1="215" y2="35"
+                                                        class="ct-bar" ct:value="9"></line>
+                                                    <line x1="217.77187728881836" x2="217.77187728881836" y1="215" y2="95"
+                                                        class="ct-bar" ct:value="6"></line>
+                                                    <line x1="252.83229446411133" x2="252.83229446411133" y1="215" y2="115"
+                                                        class="ct-bar" ct:value="5"></line>
+                                                    <line x1="287.8927116394043" x2="287.8927116394043" y1="215" y2="175"
+                                                        class="ct-bar" ct:value="2"></line>
+                                                    <line x1="322.95312881469727" x2="322.95312881469727" y1="215" y2="55"
+                                                        class="ct-bar" ct:value="8"></line>
+                                                    <line x1="358.01354598999023" x2="358.01354598999023" y1="215" y2="155"
+                                                        class="ct-bar" ct:value="3"></line>
+                                                    <line x1="428.1343803405762" x2="428.1343803405762" y1="215" y2="115"
+                                                        class="ct-bar" ct:value="5"></line>
+                                                    <line x1="463.19479751586914" x2="463.19479751586914" y1="215" y2="135"
+                                                        class="ct-bar" ct:value="4"></line>
+                                                </g>
+                                            </g>
+                                            <g class="ct-labels">
+                                                <foreignObject style="overflow: visible;" x="50" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Jan</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="85.06041717529297" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Feb</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="120.12083435058594" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Mar</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="155.1812515258789" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Apr</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="190.24166870117188" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">May</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="225.30208587646484" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Jun</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="260.3625030517578" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Jul</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="295.4229202270508" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Aug</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="330.48333740234375" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Sep</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="365.5437545776367" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Oct</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="400.6041717529297" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Nov</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" x="435.66458892822266" y="220"
+                                                    width="35.06041717529297" height="20"><span
+                                                        class="ct-label ct-horizontal ct-end"
+                                                        style="width: 35px; height: 20px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">Dec</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="190" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">0</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="165" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">1.25</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="140" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">2.5</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="115" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">3.75</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="90" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">5</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="65" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">6.25</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="40" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">7.5</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="15" x="10" height="25"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 25px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">8.75</span></foreignObject>
+                                                <foreignObject style="overflow: visible;" y="-15" x="10" height="30"
+                                                    width="30"><span class="ct-label ct-vertical ct-start"
+                                                        style="height: 30px; width: 30px"
+                                                        xmlns="http://www.w3.org/2000/xmlns/">10</span></foreignObject>
+                                            </g>
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-lg-4">
+                            <div class="card">
+    
+                                <div class="card-body">
+                                    <div class="ct-pie-chart"><svg xmlns:ct="http://gionkunz.github.com/chartist-js/ct"
+                                            width="100%" height="100%" class="ct-chart-pie"
+                                            style="width: 100%; height: 100%;">
+                                            <g class="ct-series bg-google-plus">
+                                                <path d="M103.431,80.569A83.431,83.431,0,0,0,54.628,231.668L103.431,164Z"
+                                                    class="ct-slice-pie" ct:value="40"></path>
+                                            </g>
+                                            <g class="ct-series bg-youtube">
+                                                <path d="M54.392,231.497A83.431,83.431,0,0,0,182.869,189.505L103.431,164Z"
+                                                    class="ct-slice-pie" ct:value="30"></path>
+                                            </g>
+                                            <g class="ct-series bg-twitter">
+                                                <path d="M182.779,189.782A83.431,83.431,0,0,0,182.689,137.942L103.431,164Z"
+                                                    class="ct-slice-pie" ct:value="10"></path>
+                                            </g>
+                                            <g class="ct-series bg-facebook">
+                                                <path d="M182.779,138.218A83.431,83.431,0,0,0,103.431,80.569L103.431,164Z"
+                                                    class="ct-slice-pie" ct:value="20"></path>
+                                            </g>
+                                            <g><text dx="174.9739013228845" dy="65.5299902768008" text-anchor="start"
+                                                    class="ct-label">facebook</text><text dx="225.14687728881836" dy="164"
+                                                    text-anchor="start" class="ct-label">twitter</text><text
+                                                    dx="141.0434483676084" dy="279.7584390167858" text-anchor="start"
+                                                    class="ct-label">youtube</text><text dx="-12.327187490906923"
+                                                    dy="126.38780315827049" text-anchor="end" class="ct-label">google
+                                                    plus</text></g>
+                                        </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card bg-primary">
+                                        <div class="weather-widget">
+                                            <div id="weather-one" class="weather-one p-22"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="testimonial-widget-one p-17">
+                                            <div class="testimonial-widget-one owl-carousel owl-theme owl-loaded owl-drag">
+    
+    
+    
+    
+    
+    
+                                                <div class="owl-stage-outer">
+                                                    <div class="owl-stage"
+                                                        style="transform: translate3d(-1176px, 0px, 0px); transition: all 0.25s ease 0s; width: 2016px;">
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item active"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item" style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="owl-item cloned"
+                                                            style="width: 158px; margin-right: 10px;">
+                                                            <div class="item">
+                                                                <div class="testimonial-content">
+                                                                    <div class="testimonial-text">
+                                                                        <i class="fa fa-quote-left"></i> Lorem ipsum dolor
+                                                                        sit amet, consectetur adipisicing elit, sed do
+                                                                        eiusmod tempor incididunt ut labore et dolore magna
+                                                                        aliqua. Ut enim ad minim veniam, quis
+                                                                        nostrud exercitation <i
+                                                                            class="fa fa-quote-right"></i>
+                                                                    </div>
+                                                                    <img class="testimonial-author-img"
+                                                                        src="static/assets/images/avatar/1.jpg" alt="">
+                                                                    <div class="testimonial-author">TYRION LANNISTER</div>
+                                                                    <div class="testimonial-author-position">Founder-Ceo.
+                                                                        Dell Corp</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="owl-nav disabled">
+                                                    <div class="owl-prev">prev</div>
+                                                    <div class="owl-next">next</div>
+                                                </div>
+                                                <div class="owl-dots disabled"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-title pr">
+                                    <h4>All Exam Result</h4>
+    
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table student-data-table m-t-20">
+                                            <thead>
+                                                <tr>
+                                                    <th><label><input type="checkbox" value=""></label>Exam Name</th>
+                                                    <th>Subject</th>
+                                                    <th>Grade Point</th>
+                                                    <th>Percent Form</th>
+                                                    <th>Percent Upto</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>Mathmatics</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>Mathmatics</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>English</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>Bangla</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>Mathmatics</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>English</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Class Test</td>
+                                                    <td>Mathmatics</td>
+                                                    <td>
+                                                        4.00
+                                                    </td>
+                                                    <td>
+                                                        95.00
+                                                    </td>
+                                                    <td>
+                                                        100
+                                                    </td>
+                                                    <td>20/04/2017</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card p-0">
+                                <div class="stat-widget-three home-widget-three">
+                                    <div class="stat-icon bg-facebook">
+                                        <i class="ti-facebook"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-digit">8,268</div>
+                                        <div class="stat-text">Likes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card p-0">
+                                <div class="stat-widget-three home-widget-three">
+                                    <div class="stat-icon bg-youtube">
+                                        <i class="ti-youtube"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-digit">12,545</div>
+                                        <div class="stat-text">Subscribes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card p-0">
+                                <div class="stat-widget-three home-widget-three">
+                                    <div class="stat-icon bg-twitter">
+                                        <i class="ti-twitter"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-digit">7,982</div>
+                                        <div class="stat-text">Tweets</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card p-0">
+                                <div class="stat-widget-three home-widget-three">
+                                    <div class="stat-icon bg-danger">
+                                        <i class="ti-linkedin"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="stat-digit">9,658</div>
+                                        <div class="stat-text">Followers</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="year-calendar">
+                                        <div class="pignose-calendar pignose-calendar-blue pignose-calendar-default">
+                                            <div class="pignose-calendar-top"> <a href="#"
+                                                    class="pignose-calendar-top-nav pignose-calendar-top-prev"> <span
+                                                        class="icon-arrow-left pignose-calendar-top-icon"></span> </a>
+                                                <div class="pignose-calendar-top-date"> <span
+                                                        class="pignose-calendar-top-month">March</span> <span
+                                                        class="pignose-calendar-top-year">2021</span> </div> <a href="#"
+                                                    class="pignose-calendar-top-nav pignose-calendar-top-next"> <span
+                                                        class="icon-arrow-right pignose-calendar-top-icon"></span> </a>
+                                            </div>
+                                            <div class="pignose-calendar-header">
+                                                <div class="pignose-calendar-week pignose-calendar-week-sun">SUN</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-mon">MON</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-tue">TUE</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-wed">WED</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-thu">THU</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-fri">FRI</div>
+                                                <div class="pignose-calendar-week pignose-calendar-week-sat">SAT</div>
+                                            </div>
+                                            <div class="pignose-calendar-body">
+                                                <div class="pignose-calendar-row">
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-sun"></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-mon"
+                                                        data-date="2021-03-01"><a href="#">1</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-tue"
+                                                        data-date="2021-03-02"><a href="#">2</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-wed"
+                                                        data-date="2021-03-03"><a href="#">3</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-thu"
+                                                        data-date="2021-03-04"><a href="#">4</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-fri"
+                                                        data-date="2021-03-05"><a href="#">5</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sat"
+                                                        data-date="2021-03-06"><a href="#">6</a></div>
+                                                </div>
+                                                <div class="pignose-calendar-row">
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sun"
+                                                        data-date="2021-03-07"><a href="#">7</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-mon"
+                                                        data-date="2021-03-08"><a href="#">8</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-tue"
+                                                        data-date="2021-03-09"><a href="#">9</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-wed"
+                                                        data-date="2021-03-10"><a href="#">10</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-thu"
+                                                        data-date="2021-03-11"><a href="#">11</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-fri"
+                                                        data-date="2021-03-12"><a href="#">12</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sat"
+                                                        data-date="2021-03-13"><a href="#">13</a></div>
+                                                </div>
+                                                <div class="pignose-calendar-row">
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sun"
+                                                        data-date="2021-03-14"><a href="#">14</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-mon"
+                                                        data-date="2021-03-15"><a href="#">15</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-tue"
+                                                        data-date="2021-03-16"><a href="#">16</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-wed"
+                                                        data-date="2021-03-17"><a href="#">17</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-thu"
+                                                        data-date="2021-03-18"><a href="#">18</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-fri"
+                                                        data-date="2021-03-19"><a href="#">19</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sat"
+                                                        data-date="2021-03-20"><a href="#">20</a></div>
+                                                </div>
+                                                <div class="pignose-calendar-row">
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sun"
+                                                        data-date="2021-03-21"><a href="#">21</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-mon"
+                                                        data-date="2021-03-22"><a href="#">22</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-tue"
+                                                        data-date="2021-03-23"><a href="#">23</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-wed"
+                                                        data-date="2021-03-24"><a href="#">24</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-thu"
+                                                        data-date="2021-03-25"><a href="#">25</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-fri pignose-calendar-unit-active pignose-calendar-unit-first-active"
+                                                        data-date="2021-03-26"><a href="#">26</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sat"
+                                                        data-date="2021-03-27"><a href="#">27</a></div>
+                                                </div>
+                                                <div class="pignose-calendar-row">
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-sun"
+                                                        data-date="2021-03-28"><a href="#">28</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-mon"
+                                                        data-date="2021-03-29"><a href="#">29</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-tue"
+                                                        data-date="2021-03-30"><a href="#">30</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-date pignose-calendar-unit-wed"
+                                                        data-date="2021-03-31"><a href="#">31</a></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-thu"></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-fri"></div>
+                                                    <div class="pignose-calendar-unit pignose-calendar-unit-sat"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Notice Board </h4>
+    
+                                </div>
+                                <div class="recent-comment m-t-15">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/1.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-primary">john doe</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <p class="comment-date">10 min ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/2.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-success">Mr. John</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <p class="comment-date">1 hour ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/3.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-danger">Mr. John</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <div class="comment-date">Yesterday</div>
+                                        </div>
+                                    </div>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/1.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-primary">john doe</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <p class="comment-date">10 min ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/2.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-success">Mr. John</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <p class="comment-date">1 hour ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="media no-border">
+                                        <div class="media-left">
+                                            <a href="#"><img class="media-object" src="static/assets/images/avatar/3.jpg"
+                                                    alt="..."></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <h4 class="media-heading color-info">Mr. John</h4>
+                                            <p>Cras sit amet nibh libero, in gravida nulla.</p>
+                                            <div class="comment-date">Yesterday</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                        <!-- /# column -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Timeline</h4>
+    
+                                </div>
+                                <div class="card-body">
+                                    <ul class="timeline">
+                                        <li>
+                                            <div class="timeline-badge primary"><i class="fa fa-smile-o"></i></div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h5 class="timeline-title">School promote video sharing</h5>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>10 minutes ago</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-badge warning"><i class="fa fa-sun-o"></i></div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h5 class="timeline-title">Ready our school website and online service
+                                                    </h5>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>20 minutes ago</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-badge danger"><i class="fa fa-times-circle-o"></i></div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h5 class="timeline-title">Routine pubish our website form 10/03/2017
+                                                    </h5>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>30 minutes ago</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-badge success"><i class="fa fa-check-circle-o"></i></div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h5 class="timeline-title">Principle quotation publish our website</h5>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>15 minutes ago</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="timeline-badge warning"><i class="fa fa-sun-o"></i></div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h5 class="timeline-title">Class schedule publish our website</h5>
+                                                </div>
+                                                <div class="timeline-body">
+                                                    <p>20 minutes ago</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /# card -->
+                        </div>
+                    </div>
+                    <!-- /# row -->
+    
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-title">
+                                    <h4>Task</h4>
+    
+                                </div>
+                                <div class="todo-list">
+                                    <div class="tdl-holder">
+                                        <div class="tdl-content">
+                                            <ul>
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox"><i></i><span>22,Dec Publish The Final Exam
+                                                            Result</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" checked=""><i></i><span>First Jan Start Our
+                                                            School</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox"><i></i><span>Recently Our Maganement
+                                                            Programme Start</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" checked=""><i></i><span>Check out some
+                                                            Popular courses</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+    
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" checked=""><i></i><span>First Jan Start Our
+                                                            School</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label>
+                                                        <input type="checkbox" checked=""><i></i><span>Connect with one new
+                                                            person</span>
+                                                        <a href="#" class="ti-close"></a>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <input type="text" class="tdl-new form-control"
+                                            placeholder="Write new item and hit 'Enter'...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-title pr">
+                                    <h4>All Expense</h4>
+    
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table student-data-table m-t-20">
+                                            <thead>
+                                                <tr>
+                                                    <th><label><input type="checkbox" value=""></label>ID</th>
+                                                    <th>Expense Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                    <th>Email</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><label><input type="checkbox" value=""></label>#2901</td>
+                                                    <td>
+                                                        Salary
+                                                    </td>
+                                                    <td>
+                                                        $2000
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-primary">Paid</span>
+                                                    </td>
+                                                    <td>
+                                                        edumin@gmail.com
+                                                    </td>
+                                                    <td>
+                                                        10/05/2017
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label><input type="checkbox" value=""></label>#2901</td>
+                                                    <td>
+                                                        Salary
+                                                    </td>
+                                                    <td>
+                                                        $2000
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-warning">Pending</span>
+                                                    </td>
+                                                    <td>
+                                                        edumin@gmail.com
+                                                    </td>
+                                                    <td>
+                                                        10/05/2017
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label><input type="checkbox" value=""></label>#2901</td>
+                                                    <td>
+                                                        Salary
+                                                    </td>
+                                                    <td>
+                                                        $2000
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-primary">Paid</span>
+                                                    </td>
+                                                    <td>
+                                                        edumin@gmail.com
+                                                    </td>
+                                                    <td>
+                                                        10/05/2017
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label><input type="checkbox" value=""></label>#2901</td>
+                                                    <td>
+                                                        Salary
+                                                    </td>
+                                                    <td>
+                                                        $2000
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-danger">Due</span>
+                                                    </td>
+                                                    <td>
+                                                        edumin@gmail.com
+                                                    </td>
+                                                    <td>
+                                                        10/05/2017
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label><input type="checkbox" value=""></label>#2901</td>
+                                                    <td>
+                                                        Salary
+                                                    </td>
+                                                    <td>
+                                                        $2000
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-primary">Paid</span>
+                                                    </td>
+                                                    <td>
+                                                        edumin@gmail.com
+                                                    </td>
+                                                    <td>
+                                                        10/05/2017
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+                    </div>
+    
+    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="footer">
+                                <p>Copyright © 2019.Company name All rights reserved.<a target="_blank"
+                                        href="http://sc.chinaz.com/moban/">网页模板</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    {% block scripts %}
+    <script src="static/assets/js/lib/jquery.min.js"></script>
+    <script src="static/assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <!-- nano scroller -->
+    <script src="static/assets/js/lib/menubar/sidebar.js"></script>
+    <script src="static/assets/js/lib/preloader/pace.min.js"></script>
+    <!-- sidebar -->
+
+    <script src="static/assets/js/lib/bootstrap.min.js"></script><script src="static/assets/js/scripts.js"></script>
+    <!-- bootstrap -->
+
+    <script src="static/assets/js/lib/calendar-2/moment.latest.min.js"></script>
+    <script src="static/assets/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <script src="static/assets/js/lib/calendar-2/pignose.init.js"></script>
+
+
+    <script src="static/assets/js/lib/weather/jquery.simpleWeather.min.js"></script>
+    <script src="static/assets/js/lib/weather/weather-init.js"></script>
+    <script src="static/assets/js/lib/circle-progress/circle-progress.min.js"></script>
+    <script src="static/assets/js/lib/circle-progress/circle-progress-init.js"></script>
+    <script src="static/assets/js/lib/chartist/chartist.min.js"></script>
+    <script src="static/assets/js/lib/sparklinechart/jquery.sparkline.min.js"></script>
+    <script src="static/assets/js/lib/sparklinechart/sparkline.init.js"></script>
+    <script src="static/assets/js/lib/owl-carousel/owl.carousel.min.js"></script>
+    <script src="static/assets/js/lib/owl-carousel/owl.carousel-init.js"></script>
+    <!-- scripit init-->
+    <script src="static/assets/js/dashboard2.js"></script>
+    {% endblock %}
+</body>
+
+</html>

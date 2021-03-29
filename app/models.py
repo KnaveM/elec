@@ -24,8 +24,8 @@ class Order(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # id
 	status = db.Column(db.Integer, default=0)  # 状态
-	money = db.Column(db.Integer, nullable=False)
-	deadline = db.Column(db.DateTime, nullable=False)
+	money = db.Column(db.Integer)
+	deadline = db.Column(db.DateTime)
 	#validation = 
 	feedback_type = db.Column(db.Integer)
 	feedback = db.Column(db.String(2000))
@@ -45,7 +45,8 @@ class Order(db.Model):
 		super().__init__(*args, **kwargs)
 		self.store_id = buyer_store.id
 		db.session.add(self)
-		db.session.flush()
+		# db.session.flush() # 不需要获得id
+
 
 class Validation(db.Model):
 	'验收方式' # TODO: 验收方式
@@ -69,6 +70,20 @@ class Payment(db.Model):
 	# MARK: 外键一对多
 	orders = db.relationship('Order', backref=db.backref('payment'), uselist=False)  # order-payment
 
+
+class Cart(db.Model):
+	"用户购物车辅助表"
+	__tablename__ = 'carts'
+	__table_args__ = {'mysql_collate': 'utf8_general_ci'}
+	user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+	product_id = db.Column(db.Integer, db.ForeignKey('products.id'), primary_key=True)
+
+	count = db.Column(db.Integer, default=1, nullable=False)
+
+	# 外键
+	store_id = db.Column(db.Integer, db.ForeignKey("store_infos.id")) # 目的地
+
+
 class Product(db.Model):
 	'产品信息'
 	__tablename__ = 'products'
@@ -81,7 +96,8 @@ class Product(db.Model):
 	comment = db.Column(db.Text)
 
 	# MARK: 外键一对多
-	factory_id = db.Column(db.Integer, db.ForeignKey("factory_infos.id")) # factory<-product 
+	factory_id = db.Column(db.Integer, db.ForeignKey("factory_infos.id")) # factory<-product
+	cart = db.relationship("Cart", backref=db.backref('product', uselist=False))
 
 	# MARK: 外键多对多
 	orders = db.relationship('OrderProduct', backref=db.backref('products', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan')
@@ -284,11 +300,18 @@ class User(db.Model, UserMixin):
 	subordinates = db.relationship("User", back_populates="master")
 
 	# MARK: 外键多对多
-	# roles
+	cart_products = db.relationship('Cart', backref=db.backref('user', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan') # 购物车中的产品
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 	
+	def add_to_cart(self, p, count=1):
+		c = Cart(user_id=self.id, product_id=p.id, count=count)
+		self.cart_products.append(c)
+
+	def edit_cart_product(self, p, count):
+		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
+		c.count=count
 
 	def can(self, role:Role):
 		'用户权限认证'

@@ -5,6 +5,6 @@
 		}
 	],
 	"settings": {
-		"python.pythonPath": "/root/anaconda3/envs/elec/bin/python"
+		"python.pythonPath": "/root/miniconda3/envs/elec/bin/python"
 	}
 }

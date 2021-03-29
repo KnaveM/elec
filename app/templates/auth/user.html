@@ -93,7 +93,20 @@
 	</tbody>
 </table>
 
-<!-- TODO: 订单 -->
+<!-- 购物车 -->
+<h1>购物车</h1>
+<table class="table">
+	<thead>
+		<th>工厂</th><th>产品名</th><th>数量</th>
+	</thead>
+	<tbody>
+		{% for cart_product in current_user.cart_products %}
+		{% set p = cart_product.product %}
+		<tr><td>{{p.factory.name}}</td><td>{{p.name}}</td><td>{{ cart_product.count }}</td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
 
 <!-- 统计报表 -->
 

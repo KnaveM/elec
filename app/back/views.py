@@ -65,6 +65,11 @@ def delete_product(id):
 	db.session.commit()
 	return redirect(url_for('auth.user', id=current_user.id))
 
-@back.route('/addsubordinate')
-def add_subordinate():
-	return "success"
+
+
+
+# MARK: 订单管理
+@back.route('/cart/addproduct')
+def cart_add_product():
+	"向购物车添加产品"
+	pass
