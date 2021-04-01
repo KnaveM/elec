@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} {{ product.name }} {% endblock %}
+
+{% block page_content %}
+
+<div>
+<h1>标题: {{ product.name }}</h1>
+<p>一些图片</p>
+<p>其他字段</p>
+<p>版本: {{ product.version }}</p>
+<p>版本: {{ product.description }}</p>
+<p>版本: {{ product.comment }}</p>
+</div>
+
+{% endblock %}

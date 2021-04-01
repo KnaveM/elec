@@ -25,3 +25,4 @@ Werkzeug
 WTForms
 gunicorn
 gevent
+gevent-websocket

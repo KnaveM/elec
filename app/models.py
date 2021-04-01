@@ -48,6 +48,27 @@ class Order(db.Model):
 		db.session.add(self)
 		# db.session.flush() # 不需要获得id
 
+	def add_product(self, product, count=1):
+		op = self.products.filter_by(product_id=product.id).first()
+		if op:
+			op.count += count
+		else:
+			op = OrderProduct(order_id=self.id, product_id=product.id, count=count)
+			self.products.append(op)
+		db.session.add(self)
+			
+
+	def reduce_product(self, product, count):
+		op = self.products.filter_by(product_id=product.id).first()
+		if op:
+			op.count -= count
+			if op.count == 0:
+				self.products.remove(op)
+		else:
+			return 0
+		db.session.add(self)
+		return count
+
 
 class Validation(db.Model):
 	'验收方式' # TODO: 验收方式
@@ -73,7 +94,7 @@ class Payment(db.Model):
 
 
 class Cart(db.Model):
-	"用户购物车辅助表"
+	"用户购物车辅助表 备货单"
 	__tablename__ = 'carts'
 	__table_args__ = {'mysql_collate': 'utf8_general_ci'}
 	user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
@@ -95,7 +116,7 @@ class Product(db.Model):
 	__table_args__ = {'mysql_collate': 'utf8_general_ci'}
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # id
-	name = db.Column(db.String(1000))
+	name = db.Column(db.String(1000)) #标题
 	version = db.Column(db.String(20))
 	description = db.Column(db.String(2000))
 	comment = db.Column(db.Text)

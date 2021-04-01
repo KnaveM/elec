@@ -18,10 +18,19 @@
 				{% if current_user.is_authenticated %}
 				<li><a href="{{url_for('auth.user', id=current_user.id)}}">{{current_user.username}}</a></li>
 				<li><a href="{{url_for('auth.logout')}}">退出</a></li>
+				<li><a href="{{ url_for("main.cart") }}">购物车</a></li>
 				{% else %}
 				<li><a href="{{url_for('auth.login')}}">登陆</a></li>
 				<li><a href="{{url_for('auth.register')}}">注册</a></li>
 				{% endif %}
+				<li >
+					<!-- <span class="input-group"> -->
+					<input type="text" class="form-control"	 aria-describedby="basic-addon2" placeholder="输入商品名称或编号">
+					<!-- <button class="input-group-addon" id="basic-addon2" href="#">搜索</button> -->
+				  <!-- </span> -->
+				</li>
+				<li><a  id="basic-addon2" href="#">搜索</a></li>
+				
 			</ul>
 		</div>
 		

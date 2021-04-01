@@ -1,5 +1,10 @@
 # 大商电器代理服务平台系统
 
+## TODO
+
+## NOTE
+删除docker日志 `cat /dev/null > /var/lib/docker/container/<container_id>/<container_id>-json.log`
+
 ## 开发环境搭建
 操作系统: Ubuntu  
 编程语言: python3  

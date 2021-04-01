@@ -12,7 +12,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
-# socketio = SocketIO()  # TODO: socketio配置
+socketio = SocketIO()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -30,9 +30,7 @@ def create_app(config_name='default'):
     moment.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    #socketio.init_app(app=app)
-
-    # TODO: jinja2 环境变量设置
+    socketio.init_app(app, cors_allowed_origins = '*')
     
     # 将蓝图添加到app实例中
     from .main import main as main_blueprint

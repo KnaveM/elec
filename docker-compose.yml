@@ -1,0 +1,9 @@
+version: '3' # 表示该 Docker-Compose 文件使用的是 Version 2 file
+services:
+  flask:  # 指定服务名称
+    build: .  # 指定 Dockerfile 所在路径
+    ports:    # 指定端口映射
+      - "80:80"
+  # mysql:
+  #   ports:
+  #     - "3306:3306"

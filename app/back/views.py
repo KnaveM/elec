@@ -12,7 +12,7 @@ def before_request():
 
 @back.route('/')
 def index():
-	return "back"
+	return render_template("back/index.html")
 
 @back.route('/store/<int:id>')
 def store_backend(id):

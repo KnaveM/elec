@@ -6,5 +6,5 @@ from . import views, errors
 
 @main.app_context_processor
 def add_jinja2_context():
-    from ..models import Permission
-    return dict(Permission=Permission, list=list)
+    from ..models import Permission, Product
+    return dict(Permission=Permission, list=list, Product=Product)
