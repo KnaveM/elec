@@ -29,7 +29,8 @@ class ProductForm(FlaskForm):
 	img3 = FileField("主图3", validators=[FileRequired()])
 	img4 = FileField("主图4", validators=[FileRequired()])
 	img5 = FileField("主图5", validators=[FileRequired()])
-	description = StringField("描述:", validators=[Required()])
+	subtitle = StringField("子标题:", validators=[Required()])
+	description = StringField("详情描述:", validators=[Required()])
 	specification = StringField("参数:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
 
 	comment = StringField("备注:", validators=[Required()])
