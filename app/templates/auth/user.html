@@ -84,7 +84,7 @@
 		{% if role.permissions==Permission.FACTORY_OWNER or role.permissions==Permission.FACTORY_PRODUCT_MANAGER %}
 		{% for factory in [role.factory] %}
 		{% for product in factory.products %}
-		<tr><td>{{ product.name }}</td><td>{{ product.version }}</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td>
+		<tr><td>{{ product.name }}</td><td>0</td><td>{{ product.description }}</td><td>{{ product.comment }}</td><td>{{ factory.name }}</td><td>
 			<a href="{{ url_for('back.edit_product', id=product.id) }}">修改</a>
 			<a href="{{ url_for('back.delete_product', id=product.id) }}">删除</a>
 			<a href="{{ url_for('back.cart_add_product', id=product.id) }}">添加到购物车</a>

@@ -1,4 +1,5 @@
 from flask.globals import current_app
+from flask.helpers import url_for
 from flask_login import UserMixin, AnonymousUserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -54,20 +55,24 @@ class Order(db.Model):
 			op.count += count
 		else:
 			op = OrderProduct(order_id=self.id, product_id=product.id, count=count)
+			op.price = product.price
 			self.products.append(op)
 		db.session.add(self)
+		return op
 			
 
 	def reduce_product(self, product, count):
+		"TODO: 订单不需要删除吧?"
 		op = self.products.filter_by(product_id=product.id).first()
 		if op:
 			op.count -= count
 			if op.count == 0:
 				self.products.remove(op)
+				return None
 		else:
-			return 0
+			return None
 		db.session.add(self)
-		return count
+		return op
 
 
 class Validation(db.Model):
@@ -117,7 +122,10 @@ class Product(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # id
 	name = db.Column(db.String(1000)) #标题
-	version = db.Column(db.String(20))
+	price = db.Column(db.Integer) # 单价
+	# 图片必须要有五张 直接以id-1/2/3/4/5来管理即可
+	subtitle = db.Column(db.String(2000)) # 副标题
+	specification = db.Column(db.String(2000))  # json str 产品参数
 	description = db.Column(db.String(2000))
 	comment = db.Column(db.Text)
 
@@ -129,6 +137,7 @@ class Product(db.Model):
 	orders = db.relationship('OrderProduct', backref=db.backref('products', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan')
 
 	def __init__(self, factory, *args, **kwargs) -> None:
+		"通过工厂生成, 默认flush生成产品id"
 		super().__init__(*args, **kwargs)
 		factory.add_product(self)
 		db.session.add(self)
@@ -341,6 +350,13 @@ class User(db.Model, UserMixin):
 		super().__init__(*args, **kwargs)
 	
 	# MARK: 购物车
+	def get_cart_product_count(self, p):
+		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
+		if c is None:
+			return 0
+		else:
+			return c.count
+
 	def add_to_cart(self, p, count=1):
 		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
 		if c is None:
@@ -351,9 +367,26 @@ class User(db.Model, UserMixin):
 			db.session.add(c)
 		db.session.add(self)
 
-	def edit_cart_product(self, p, count):
+	def reduce_from_cart(self, p, count=1):
 		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
-		c.count=count
+		if c is None:
+			return -1
+		else:
+			c.count -= count
+			if c.count <= 0:
+				self.cart_products.remove(c)
+			db.session.add(c)
+			db.session.add(self)
+
+	def create_order(self, store):
+		o = Order(store)
+		for c in self.cart_products:
+			o.add_product(c.product, c.count)
+			self.reduce_from_cart(c.product, c.count)
+		db.session.add(o)
+
+		return o
+
 
 	# MARK: 下属管理
 	def add_subordinate(self, new_user):

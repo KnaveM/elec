@@ -15,6 +15,7 @@ RUN pip install -r requirements.txt
 # gunicorn.conf.py中进行配置
 CMD ["gunicorn", "manage:app", "--log-level=debug", "-c", "./gunicorn.conf.py"]
 
+# gunicorn -b 0.0.0.0:88 --log-level=debug -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 manage:app
 
 # 构建镜像 只在最后测试的时候重新构建 其他情况直接bash添加
 # docker build -t 'testflask' .
@@ -41,4 +42,4 @@ CMD ["gunicorn", "manage:app", "--log-level=debug", "-c", "./gunicorn.conf.py"]
 # docker exec -it flask python manage.py shell
 
 # 清除docker logs
-# cat /dev/null > /var/lib/docker/containers
+# cat /dev/null > /var/lib/docker/containers/
