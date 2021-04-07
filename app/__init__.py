@@ -32,6 +32,15 @@ def create_app(config_name='default'):
     login_manager.init_app(app)
     socketio.init_app(app, cors_allowed_origins = '*')
     
+    # flask中给jinja注册strftime过滤器
+    @app.template_filter('strftime')
+    def _jinja2_filter_datetime(date, fmt=None):
+        from datetime import timedelta
+        output_date = date+timedelta(hours=8)
+        if fmt is None:
+            fmt = '%Y-%m-%d %H:%M:%S'
+        return output_date.strftime(fmt)
+
     # 将蓝图添加到app实例中
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

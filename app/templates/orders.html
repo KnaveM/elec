@@ -1,0 +1,10 @@
+{% extends "front_base.html" %}
+
+{% block title %}从购物车生成的订单{% endblock %}
+
+{% block page_content %}
+
+{% for order in orders %}
+{% include "order_template.html" %}
+{% endfor %}
+{% endblock %}

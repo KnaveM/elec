@@ -3,10 +3,16 @@
 {% block title %}上传产品{{ current_user.username }}{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-	<h1>上传产品</h1>
-</div>
-<div class="col-md-4">
-	{{ wtf.quick_form(form) }}
+<div class="customer_login">
+	<div class="container" style="margin-top: 100px;">
+		<div class="row">
+			<div class="page-header">
+				<h1>上传产品</h1>
+			</div>
+			<div class="col-md-4">
+				{{ wtf.quick_form(form) }}
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}

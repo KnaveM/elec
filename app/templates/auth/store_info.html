@@ -1,12 +1,24 @@
-{% extends "base.html" %}
+{% extends "back/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}修改物业信息{{ current_user.username }}{% endblock %}
 
+
 {% block page_content %}
-<div class="page-header">
-	<h1>修改物业信息</h1>
+<h1 class="app-page-title">添加新门店</h1>
+<hr class="mb-4">
+<div class="row g-4 settings-section">
+    <div class="col-12 col-md-8">
+        <div class="app-card app-card-settings shadow-sm p-4">
+
+            <div class="app-card-body">
+                {{ wtf.quick_form(form) }}
+            </div>
+            <!--//app-card-body-->
+
+        </div>
+        <!--//app-card-->
+    </div>
 </div>
-<div class="col-md-4">
-	{{ wtf.quick_form(form) }}
-</div>
+
 {% endblock %}
+

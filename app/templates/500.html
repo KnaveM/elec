@@ -1,8 +1,4 @@
-{% extends "base.html" %}
-
-{% block title %}错误500--服务器错误{% endblock %}
-
-{% block content %}
-{{super()}}
-<div> <h1>错误500--服务器错误</h1></div>
-{% endblock %}
+{% set error_code = 500 %}
+{% set error_type = "Internal Server Error" %}
+{% set error_message = "服务器内部错误, 请联系您的系统管理员" %}
+{% include "error.html" %}

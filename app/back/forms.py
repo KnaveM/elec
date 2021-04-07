@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, SubmitField, BooleanField, SelectField, FileField
 from flask_wtf.file import FileRequired, FileAllowed
+from wtforms.fields.core import IntegerField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo, ValidationError
 
 from ..models import User
@@ -30,10 +31,10 @@ class ProductForm(FlaskForm):
 	img4 = FileField("主图4", validators=[FileRequired()])
 	img5 = FileField("主图5", validators=[FileRequired()])
 	subtitle = StringField("子标题:", validators=[Required()])
-	description = StringField("详情描述:", validators=[Required()])
+	price = IntegerField("单价:", validators=[Required()])
+	# description = StringField("详情描述:", validators=[Required()])
 	specification = StringField("参数:", validators=[Required(), Length(-1, 1000, "地址最多不超过1000字符")])
-
-	comment = StringField("备注:", validators=[Required()])
+	# comment = StringField("备注:", validators=[Required()])
 	factory = SelectField("工厂:")
 	submit = SubmitField("保存")
 

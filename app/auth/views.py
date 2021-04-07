@@ -66,12 +66,7 @@ def edit_user_info(id):
 def addstore():
 	form = StoreInfoForm()
 	if form.validate_on_submit():
-		si = StoreInfo(user_id=current_user.id)
-		si.name=form.name.data
-		si.address=form.address.data
-		si.contact=form.contact.data
-		si.phone=form.phone.data
-		db.session.add(si)
+		si = StoreInfo(current_user, name=form.name.data, address=form.address.data, contact=form.contact.data, phone=form.phone.data)
 		db.session.commit()
 		return redirect(url_for('auth.user', id=current_user.id))
 	return render_template("/auth/store_info.html", form=form)
@@ -95,13 +90,9 @@ def editstore(id):
 def addfactory():
 	form = FactoryInfoForm()
 	if form.validate_on_submit():
-		fi = FactoryInfo(user_id=current_user.id)
-		fi.name=form.name.data
-		fi.address=form.address.data
-		fi.contact=form.contact.data
-		fi.phone=form.phone.data
-		fi.complaint_department = form.complaint_department.data
-		fi.complaint_method = form.complaint_method.data
+		fi = FactoryInfo(current_user, name=form.name.data, address=form.address.data, contact=form.contact.data,
+		phone=form.phone.data, complaint_department = form.complaint_department.data,
+		complaint_method = form.complaint_method.data)
 		db.session.add(fi)
 		db.session.commit()
 		return redirect(url_for('auth.user', id=current_user.id))
@@ -142,18 +133,13 @@ def login():
 @login_required
 def logout():
 	logout_user()
-	return render_template('index.html')
+	return redirect(url_for('main.index'))
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(username=form.username.data, password=form.password.data)
-		db.session.add(user)
-		db.session.commit() # commit 获取user.id
-		
-		userinfo = UserInfo(email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data, user_id=user.id)
-		db.session.add(userinfo)
+		user = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data)
 		db.session.commit()
 
 		flash("您已成功注册，请登录")

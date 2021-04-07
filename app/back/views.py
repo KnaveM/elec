@@ -15,9 +15,34 @@ def before_request():
 def index():
 	return render_template("back/index.html")
 
-@back.route('/purchase')
-def purchase():
-	return render_template('back/purchase.html')
+@back.route('/addstore', methods=['GET', 'POST'])
+def add_store():
+	form = StoreInfoForm()
+	if form.validate_on_submit():
+		si = StoreInfo(current_user, name=form.name.data, address=form.address.data, contact=form.contact.data, phone=form.phone.data)
+		db.session.commit()
+		return redirect(url_for('back.index'))
+	return render_template("/auth/store_info.html", form=form)
+
+@back.route('/editstore/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_store(id):
+	si = StoreInfo.query.filter_by(id=id).first()
+	form = StoreInfoForm(name=si.name, address=si.address, contact=si.contact, phone=si.phone)
+	if form.validate_on_submit():
+		si.name=form.name.data
+		si.address=form.address.data
+		si.contact=form.contact.data
+		si.phone=form.phone.data
+		db.session.add(si)
+		db.session.commit()
+		return redirect(url_for('back.stores'))
+	return render_template("/auth/store_info.html", form=form)
+
+
+@back.route('/purchases')
+def purchases():
+	return render_template('back/purchases.html')
 
 @back.route('/orders')
 def orders():
@@ -53,11 +78,12 @@ def subordinates():
 def store_backend(id):
 	return "success"
 
-
 @back.route('/factory/<int:id>')
 def factory_backend(id):
 	return "success"
 
+
+# MARK: 产品管理
 @back.route('/addproduct', methods=['GET', 'POST'])
 def add_product():
 	"添加产品"
@@ -71,8 +97,9 @@ def add_product():
 		current_app.logger.debug("productid"+str(p.id))
 		p.name = form.name.data
 		# p.version = form.version.data
-		p.description = form.description.data
-		p.comment = form.comment.data
+		# p.description = form.description.data
+		p.price = form.price.data
+		# p.comment = form.comment.data
 		db.session.add(p)
 		db.session.commit()
 		form.img1.data.save(os.path.join(images_base_path, "p"+str(p.id)+"_1"))
@@ -80,7 +107,7 @@ def add_product():
 		form.img3.data.save(os.path.join(images_base_path, "p"+str(p.id)+"_3"))
 		form.img4.data.save(os.path.join(images_base_path, "p"+str(p.id)+"_4"))
 		form.img5.data.save(os.path.join(images_base_path, "p"+str(p.id)+"_5"))
-		return redirect(url_for('auth.user', id=current_user.id))
+		return redirect(url_for('back.index'))
 	return render_template("/auth/product.html", form=form)
 
 @back.route('/editproduct/<int:id>', methods=['GET', 'POST'])
@@ -112,17 +139,3 @@ def delete_product(id):
 	flash('删除产品成功')
 	return redirect(url_for('auth.user', id=current_user.id))
 
-
-
-
-# MARK: 订单管理 DROPPED
-@back.route('/cart/addproduct/<int:id>')
-def cart_add_product(id):
-	"向购物车添加产品"
-	p = Product.query.filter_by(id=id).first()
-	if p is None:
-		flash("无法添加到购物车, 无此产品")
-		return redirect(url_for('auth.user', id=current_user.id))
-	current_user.add_to_cart(p)
-	db.session.commit()
-	return redirect(url_for('auth.user', id=current_user.id))

@@ -19,39 +19,46 @@
 	{% endblock%}
 
     {% block scripts %}
-	<!-- 全局JS -->
-    <script src="{{ url_for('static', filename='front/assets/js/vendor.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='front/assets/js/plugins.min.js')}}"></script>
-    <!-- Main JS -->
-    <script src="{{ url_for('static', filename='front/assets/js/main.js')}}"></script> 
+    <!-- 全局JS -->
     
     <!-- for socketio  -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js" crossorigin="anonymous"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js" crossorigin="anonymous"></script> -->
+    <script src="{{url_for('static', filename='assets/js/socket.io.js')}}"></script>
     <script type="text/javascript" charset="utf-8">
         var socket = io();
-        socket.on('connect', function () {
-            console.log("successfully connected to server")
-        });
+            socket.on('connect', function () {
+                console.log("successfully connected to server")
+            });
 
-        socket.on('cart', function(data) {
+        socket.on('cart', function (data) {
             console.log("cart response", data)
-            var json_data = data
-            var p = document.querySelector("#product-"+String(json_data['product_id'])+" .cart-product-count")
-            p.innerText = json_data['cart_product_count']
+            if (data['action'] == 1 || data['action']==2){
+                var json_data = data
+                var p = document.querySelector("#product-" + String(json_data['product_id']) + " .cart-product-count")
+                if (p!=null) {
+                    p.innerText = json_data['cart_product_count']
+                }
+            }
+            
+            update_cart_product_count(data['cart_count'])
         })
+
+        function make_json() {
+            return {"user_id": Number(document.getElementById('current-user-id').innerText)}
+        }
 
         function onclick_add_product(obj) {
             var json_data = {"user_id": Number(document.getElementById('current-user-id').innerText), "product_id": Number(obj.getAttribute("product-id")), "action":1, "count":1}
             console.log("添加产品到购物车")
             console.log(obj)
-            socket.emit("cart", json_data)//data=JSON.stringify(json_data))
+            socket.emit("cart", json_data)
         }
 
         function onclick_reduce_product(obj) {
             var json_data = {"user_id": Number(document.getElementById('current-user-id').innerText), "product_id": Number(obj.getAttribute("product-id")), "action":2, "count":1}
             console.log("删除购物车产品")
             console.log(obj)
-            socket.emit("cart", json_data)//data=JSON.stringify(json_data))
+            socket.emit("cart", json_data)
             // 计算总价
             // 删除数量为0的元素
         }

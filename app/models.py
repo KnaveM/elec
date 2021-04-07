@@ -3,6 +3,8 @@ from flask.helpers import url_for
 from flask_login import UserMixin, AnonymousUserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+import json
+
 
 from . import db, login_manager
 
@@ -14,10 +16,36 @@ class OrderProduct(db.Model):
 	product_id = db.Column(db.Integer, db.ForeignKey('products.id'), primary_key=True)
 
 	count = db.Column(db.Integer, default=0)
-	price = db.Column(db.Integer, default=0)
+	price = db.Column(db.Integer, default=0) # 定制价格
 	status = db.Column(db.Integer, default=0)  # 处理退款等
 	# TODO: 待补充其他属性 orderProduct
 
+	@property
+	def product(self):
+		return Product.query.filter_by(id=self.product_id).first()
+
+class OrderStatus:
+	"订单的状态"
+	CREATED = 0 # 初始化
+	WAIT_PAYMENT = 1 # 等待买家付款
+	PENDING = 2 # 处理中, 等待买家收货
+	WAIT_COMMENT = 3 # 买家已确认收货
+	COMMENTED = 4 # 买家已评论, 全部流程已结束
+
+	@staticmethod
+	def to_str(status):
+		if status==OrderStatus.CREATED:
+			return "初始化"
+		elif status==OrderStatus.WAIT_PAYMENT:
+			return "等待支付"
+		elif status==OrderStatus.PENDING:
+			return "正在处理"
+		elif status==OrderStatus.WAIT_COMMENT:
+			return "等待评论"
+		elif status==OrderStatus.COMMENTED:
+			return "已评论"
+		else:
+			return "错误"
 
 class Order(db.Model):
 	"订单"
@@ -26,8 +54,9 @@ class Order(db.Model):
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # id
 	status = db.Column(db.Integer, default=0)  # 状态
-	money = db.Column(db.Integer)
+	money = db.Column(db.Integer)  #运费?
 	deadline = db.Column(db.DateTime)
+	create_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 	#validation = 
 	feedback_type = db.Column(db.Integer)
 	feedback = db.Column(db.String(2000))
@@ -35,6 +64,9 @@ class Order(db.Model):
 	payment_number = db.Column(db.String(20)) # 支付单号
 		
 	# validation_id = db.Column(db.Integer, db.ForeignKey('validations.id')) # TODO: 验收方式
+
+	# buyer_agent 买家代理账户
+	# saler_agent 卖家代理账户
 
 	# MARK: 外键一对多
 	store_id = db.Column(db.Integer, db.ForeignKey('store_infos.id')) # 物业<-订单 相当于地址
@@ -74,6 +106,9 @@ class Order(db.Model):
 		db.session.add(self)
 		return op
 
+	@property
+	def products_total_price(self):
+		return sum([op.count*op.price for op in self.products.all()])
 
 class Validation(db.Model):
 	'验收方式' # TODO: 验收方式
@@ -126,7 +161,7 @@ class Product(db.Model):
 	# 图片必须要有五张 直接以id-1/2/3/4/5来管理即可
 	subtitle = db.Column(db.String(2000)) # 副标题
 	specification = db.Column(db.String(2000))  # json str 产品参数
-	description = db.Column(db.String(2000))
+	description = db.Column(db.String(2000)) # TODO: 不使用
 	comment = db.Column(db.Text)
 
 	# MARK: 外键一对多
@@ -142,6 +177,22 @@ class Product(db.Model):
 		factory.add_product(self)
 		db.session.add(self)
 		db.session.flush()
+
+	@property
+	def specification_json(self):
+		try:
+			js = json.loads(self.specification)
+			return js
+		except Exception as e:
+			current_app.logger.error("解析product.specification错误: %s", e)
+			return {}
+
+	@specification_json.setter
+	def specification_json(self, s_js):
+		self.specification = json.dumps(s_js)
+
+	def image_url(self, no=1):
+		return url_for('static', filename="assets/db/images/p"+str(self.id)+"_"+str(no))
 
 	def delete(self):
 		# 先删除外键
@@ -169,7 +220,7 @@ class UserInfo(db.Model):
 
 	def __init__(self, user, *args, **kwargs) -> None:
 		super().__init__(*args, **kwargs)
-		self.user_id = user.id
+		user.user_info = self
 		db.session.add(self)
 
 class StoreInfo(db.Model):
@@ -201,6 +252,10 @@ class StoreInfo(db.Model):
 		user.roles.append(r1)
 		db.session.add(user)
 		db.session.flush()
+
+	@property
+	def owner(self):
+		return [r.users[0] for r in self.roles if r.permissions==Permission.STORE_OWNER][0]
 
 factorys_payments = db.Table('factorys_payments',
     db.Column('factory_id', db.Integer, db.ForeignKey('factory_infos.id')),
@@ -347,10 +402,63 @@ class User(db.Model, UserMixin):
 	cart_products = db.relationship('Cart', backref=db.backref('user', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan') # 购物车中的产品
 
 	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
+		super().__init__(*args, username=kwargs['username'], password=kwargs['password'])
+		db.session.add(self)
+		userinfo = UserInfo(self, email=kwargs["email"], name=kwargs["name"], address=kwargs["address"], phone=kwargs["phone"])
+		db.session.add(userinfo)
 	
+	@property
+	def stores(self):
+		"一个账号可以有多个门店"
+		return [r.store for r in self.roles.filter_by(permissions=Permission.STORE_OWNER).all()]
+
+
+	@property
+	def factory(self):
+		"每个账户只能创建一个工厂"
+		fr = self.roles.filter_by(permissions=Permission.FACTORY_OWNER).first()
+		return fr.factory if fr is not None else None
+
+	# DROPPED 
+	@property
+	def factorys(self):
+		"待删除"
+		return [r.factory for r in self.roles.filter_by(permissions=Permission.FACTORY_OWNER).all()]
+
+	@property
+	def products(self):
+		if self.factorys:
+			return Product.query.filter_by(factory_id=self.factorys[0].id).all()
+		return []
+
+	@property
+	def purchases(self):
+		os = []
+		for store in self.stores:
+			os.extend(store.orders)
+		return os
+	
+	@property
+	def orders(self):
+		if self.factorys.__len__():
+			return list(set(op.order for op in OrderProduct.query.filter(OrderProduct.product_id.in_(Product.query.with_entities(Product.id).filter_by(factory_id=self.factorys[0].id), )).all()))
+		else:
+			return []
+
+	def gravatar(self, size=100, default='identicon', rating='g'):
+		"网站被墙了不能使用了"
+		import hashlib
+		hash = hashlib.md5(self.username.encode()).hexdigest()
+		return 'http://www.gravatar.com/avatar/{}?s={}&d={}&r={}'.format(hash, size, default, rating)
+
 	# MARK: 购物车
+
+	def cart_total_price(self):
+		return sum([cp.count * cp.product.price for cp in self.cart_products])
+			
+
 	def get_cart_product_count(self, p):
+		"查看指定产品在购物车中的数量"
 		c = Cart.query.filter_by(user_id=self.id, product_id=p.id).first()
 		if c is None:
 			return 0
@@ -378,15 +486,29 @@ class User(db.Model, UserMixin):
 			db.session.add(c)
 			db.session.add(self)
 
-	def create_order(self, store):
-		o = Order(store)
+	def create_orders(self, store):
+		"store为配送地址, 购物车根据产品所在的工厂进行分类, 同一个工厂的产品放在一张订单中, 返回订单列表, 生成的订单是初始化的订单"
+
+		os = {}
+		# o = Order(store)
 		for c in self.cart_products:
+			try:
+				o = os[c.product.factory_id]
+			except KeyError:
+				os[c.product.factory_id] = Order(store)
+				o = os[c.product.factory_id]
 			o.add_product(c.product, c.count)
 			self.reduce_from_cart(c.product, c.count)
-		db.session.add(o)
+		for tuple_o in os.items():
+			db.session.add(tuple_o[1])
+		return list(os.items())
 
-		return o
-
+	def commit_order(self, order):
+		"提交订单, 设置订单状态为1未付款"
+		# TODO: check
+		if order.status == OrderStatus.CREATED:
+			order.status = OrderStatus.WAIT_PAYMENT
+		db.session.add(order)
 
 	# MARK: 下属管理
 	def add_subordinate(self, new_user):

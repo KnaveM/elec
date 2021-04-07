@@ -6,260 +6,154 @@
 <style>
     h1, h2, h3, h4, h5 {
         size: 13px;
+        line-height: 28px;
+        /*文字在此行高垂直居中*/
+        line-height: 2em;
+        /*2倍行高,em是参照当前文字的实际文字大小*/
         /* letter-spacing: 5px; */
     }
 </style>
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+
+<script>
+    function onclick_add_to_cart() {
+        let count = Number(document.getElementById("count").value)
+        var json_data = {"user_id": Number(document.getElementById('current-user-id').innerText), "product_id": Number(document.getElementById("product-id").innerText), "action":1, "count":count}
+        update_modalAddCart_img(json_data["product_id"])
+        console.log("添加产品到购物车")
+        socket.emit("cart", json_data)
+    }
+</script>
+
+{% endblock %}
+
 {% block page_content %}
-    <!-- Start Product Details Section -->
-    <div class="product-details-section section-top-gap-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="product-details-gallery-area d-flex align-items-center flex-row-reverse" >
-                        <div class="product-large-image product-large-image-vertical ml-15">
-                            {% for i in [1,2,3,4,5] %}
-                            <div class="product-image-large-single">
-                                <!-- 删除class  不要随着鼠标移动而放大图片 -->
-                                <img src="{{url_for('static', filename='assets/db/images/p'+str(product.id)+'_'+str(i))}}" alt="">
-                            </div>
-                            {% endfor %}
+<!-- Start Product Details Section -->
+<div class="product-details-section section-top-gap-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-details-gallery-area d-flex align-items-center flex-row-reverse" >
+                    <div class="product-large-image product-large-image-vertical ml-15">
+                        {% for i in [1,2,3,4,5] %}
+                        <div class="product-image-large-single">
+                            <!-- 删除class  不要随着鼠标移动而放大图片 -->
+                            <img src="{{url_for('static', filename='assets/db/images/p'+str(product.id)+'_'+str(i))}}" alt="">
                         </div>
-                        <div class="product-image-thumb product-image-thumb-vertical pos-relative">
-                            {% for i in [1,2,3,4,5] %}
-                            <div class="zoom-active product-image-thumb-single">
-                                <img class="img-fluid" src="{{url_for('static', filename='assets/db/images/p'+str(product.id)+'_'+str(i))}}" alt="">
-                            </div>
-                            {% endfor %}
-                            
-                        </div>
+                        {% endfor %}
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="product-details-content-area" >
-                        <!-- Start  Product Details Text Area-->
-                        <div class="product-details-text">
-                            <h4 class="title">{{ product.name }}</h4>
-                            
-                            <div class="price">￥{{ product.price }}</div>
-                            <p>{{ product.subtitle }}</p>
-                        </div> <!-- End  Product Details Text Area-->
-                        <!-- Start Product Variable Area -->
-                        <div class="product-details-variable">
-                            <!-- <h4 class="title">Available Options</h4> -->
-                            <!-- Product Variable Single Item -->
-                            <div class="d-flex align-items-center">
-                                <div class="variable-single-item ">
-                                    <span>数量</span>
-                                    <div class="product-variable-quantity">
-                                        <input min="1" max="100" value="1" type="number">
-                                    </div>
-                                </div>
-
-                                <div class="product-add-to-cart-btn">
-                                    <a href="#" data-toggle="modal" data-target="#modalAddcart">添加到购物车</a>
-                                </div>
-                            </div>
-
-                           
-                        </div> <!-- End Product Variable Area -->
-                        <!-- Start  Product Details Meta Area-->
-                        <div class="product-details-meta mb-20">
-                            <ul>
-                                <!-- <li><a href=""><i class="icon-heart"></i>Add to wishlist</a></li> -->
-                                <li><a href=""><i class="icon-repeat"></i>TODO: 对比</a></li>
-                            </ul>
-                        </div> <!-- End  Product Details Meta Area-->
+                    <div class="product-image-thumb product-image-thumb-vertical pos-relative">
+                        {% for i in [1,2,3,4,5] %}
+                        <div class="zoom-active product-image-thumb-single">
+                            <img class="img-fluid" src="{{url_for('static', filename='assets/db/images/p'+str(product.id)+'_'+str(i))}}" alt="">
+                        </div>
+                        {% endfor %}
                         
                     </div>
                 </div>
             </div>
-        </div>
-    </div> <!-- End Product Details Section -->
-
-    <!-- Start Product Content Tab Section -->
-    <div class="product-details-content-tab-section section-inner-bg section-top-gap-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="product-details-content-tab-wrapper" >
-
-                        <!-- Start Product Details Tab Button -->
-                        <ul class="nav tablist product-details-content-tab-btn d-flex justify-content-center">
-                            <li><a class="nav-link active" data-toggle="tab" href="#description">
-                                    <h5>详情描述</h5>
-                                </a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#specification">
-                                    <h5>细节参数</h5>
-                                </a></li>
-                                 <!-- TODO: 评论 -->
-                            <!-- <li><a class="nav-link" data-toggle="tab" href="#review">
-                                    <h5>评论</h5>
-                                </a></li> -->
-                        </ul> <!-- End Product Details Tab Button -->
-
-                        <!-- Start Product Details Tab Content -->
-                        <div class="product-details-content-tab">
-                            <div class="tab-content">
-                                <!-- Start Product Details Tab Content Singel -->
-                                <div class="tab-pane active show" id="description">
-                                    <div class="single-tab-content-item">
-                                        {{ product.description }}
-                                        
-                                    </div>
-                                </div> <!-- End Product Details Tab Content Singel -->
-                                <!-- Start Product Details Tab Content Singel -->
-                                <div class="tab-pane" id="specification">
-                                    <div class="single-tab-content-item">
-                                        <!-- TODO: 细节参数table -->
-                                        {{ product.specification }}
-                                        <table class="table table-bordered mb-20">
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">Compositions</th>
-                                                    <td>Polyester</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Styles</th>
-                                                    <td>Girly</td>
-                                                <tr>
-                                                    <th scope="row">Properties</th>
-                                                    <td>Short Dress</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p>Fashion has been creating well-designed collections since 2010. The brand offers feminine designs delivering stylish separates and statement dresses which have since evolved into a full ready-to-wear collection in which every item is a vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful elegance and unmistakable signature style. All the beautiful pieces are made in Italy and manufactured with the greatest attention. Now Fashion extends to a range of accessories including shoes, hats, belts and more!</p>
-                                    </div>
-                                </div> <!-- End Product Details Tab Content Singel -->
-                                <!-- Start Product Details Tab Content Singel -->
-                                <div class="tab-pane" id="review">
-                                    <div class="single-tab-content-item">
-                                        <!-- Start - Review Comment -->
-                                        <ul class="comment">
-                                            <!-- Start - Review Comment list-->
-                                            <li class="comment-list">
-                                                <div class="comment-wrapper">
-                                                    <div class="comment-img">
-                                                        <img src="static/front/assets/picture/image-1.png" alt="">
-                                                    </div>
-                                                    <div class="comment-content">
-                                                        <div class="comment-content-top">
-                                                            <div class="comment-content-left">
-                                                                <h6 class="comment-name">Kaedyn Fraser</h6>
-                                                                <div class="product-review">
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-empty"><i class="fa fa-star"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="comment-content-right">
-                                                                <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="para-content">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Start - Review Comment Reply-->
-                                                <ul class="comment-reply">
-                                                    <li class="comment-reply-list">
-                                                        <div class="comment-wrapper">
-                                                            <div class="comment-img">
-                                                                <img src="static/front/assets/picture/image-2.png" alt="">
-                                                            </div>
-                                                            <div class="comment-content">
-                                                                <div class="comment-content-top">
-                                                                    <div class="comment-content-left">
-                                                                        <h6 class="comment-name">Oaklee Odom</h6>
-                                                                    </div>
-                                                                    <div class="comment-content-right">
-                                                                        <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="para-content">
-                                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul> <!-- End - Review Comment Reply-->
-                                            </li> <!-- End - Review Comment list-->
-                                            <!-- Start - Review Comment list-->
-                                            <li class="comment-list">
-                                                <div class="comment-wrapper">
-                                                    <div class="comment-img">
-                                                        <img src="static/front/assets/picture/image-3.png" alt="">
-                                                    </div>
-                                                    <div class="comment-content">
-                                                        <div class="comment-content-top">
-                                                            <div class="comment-content-left">
-                                                                <h6 class="comment-name">Jaydin Jones</h6>
-                                                                <div class="product-review">
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-fill"><i class="fa fa-star"></i></span>
-                                                                    <span class="review-empty"><i class="fa fa-star"></i></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="comment-content-right">
-                                                                <a href="#"><i class="fa fa-reply"></i>Reply</a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="para-content">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora inventore dolorem a unde modi iste odio amet, fugit fuga aliquam, voluptatem maiores animi dolor nulla magnam ea! Dignissimos aspernatur cumque nam quod sint provident modi alias culpa, inventore deserunt accusantium amet earum soluta consequatur quasi eum eius laboriosam, maiores praesentium explicabo enim dolores quaerat! Voluptas ad ullam quia odio sint sunt. Ipsam officia, saepe repellat. </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li> <!-- End - Review Comment list-->
-                                        </ul> <!-- End - Review Comment -->
-                                        <div class="review-form">
-                                            <div class="review-form-text-top">
-                                                <h5>ADD A REVIEW</h5>
-                                                <p>Your email address will not be published. Required fields are marked *</p>
-                                            </div>
-
-                                            <form action="#" method="post">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="default-form-box mb-20">
-                                                            <label for="comment-name">Your name <span>*</span></label>
-                                                            <input id="comment-name" type="text" placeholder="Enter your name" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="default-form-box mb-20">
-                                                            <label for="comment-email">Your Email <span>*</span></label>
-                                                            <input id="comment-email" type="email" placeholder="Enter your email" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="default-form-box mb-20">
-                                                            <label for="comment-review-text">Your review <span>*</span></label>
-                                                            <textarea id="comment-review-text" placeholder="Write a review" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <button class="form-submit-btn" type="submit">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div> <!-- End Product Details Tab Content Singel -->
+            <div class="col-md-6">
+                <div class="product-details-content-area" >
+                    <!-- Start  Product Details Text Area-->
+                    <div class="product-details-text">
+                        <h4 class="title">{{ product.name }}</h4>
+                        <span id="product-id" style="display: none;"> {{ product.id }}</span>
+                        <div class="price">￥{{ product.price }}</div>
+                        <p>{{ product.subtitle }}</p>
+                    </div> <!-- End  Product Details Text Area-->
+                    <!-- Start Product Variable Area -->
+                    <div class="product-details-variable">
+                        <!-- <h4 class="title">Available Options</h4> -->
+                        <!-- Product Variable Single Item -->
+                        <div class="d-flex align-items-center">
+                            <div class="variable-single-item ">
+                                <span>数量</span>
+                                <div class="product-variable-quantity">
+                                    <input min="1" max="100" value="1" type="number" id="count">
+                                </div>
                             </div>
-                        </div> <!-- End Product Details Tab Content -->
 
-                    </div>
+                            <div class="product-add-to-cart-btn">
+                                <a href="#" data-toggle="modal" data-target="#modalAddcart" onclick="onclick_add_to_cart()">添加到购物车</a>
+                            </div>
+                        </div>
+
+                        
+                    </div> <!-- End Product Variable Area -->
+                    <!-- Start  Product Details Meta Area-->
+                    <div class="product-details-meta mb-20">
+                        <!-- <ul>
+                            <li><a href=""><i class="icon-repeat"></i>TODO: 对比</a></li>
+                        </ul> -->
+                    </div> <!-- End  Product Details Meta Area-->
+                    
                 </div>
             </div>
         </div>
-    </div> <!-- End Product Content Tab Section -->
+    </div>
+</div> <!-- End Product Details Section -->
+
+<!-- Start Product Content Tab Section -->
+<div class="product-details-content-tab-section section-inner-bg section-top-gap-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="product-details-content-tab-wrapper" >
+
+                    <!-- Start Product Details Tab Button -->
+                    <ul class="nav tablist product-details-content-tab-btn d-flex justify-content-center">
+                        <li><a class="nav-link active" data-toggle="tab" href="#description">
+                                <h5>包装及参数</h5>
+                            </a></li>
+                        
+                                <!-- TODO: 评论 -->
+                        <!-- <li><a class="nav-link" data-toggle="tab" href="#review">
+                                <h5>评论</h5>
+                            </a></li> -->
+                    </ul> <!-- End Product Details Tab Button -->
+
+                    <!-- Start Product Details Tab Content -->
+                    <div class="product-details-content-tab">
+                        <div class="tab-content">
+                            <!-- Start Product Details Tab Content Singel -->
+                            <div class="tab-pane active show" id="description">
+                                <div class="single-tab-content-item">
+                                    <!-- TODO: 细节参数table 只需要表格就行 -->
+                                    
+                                    <table class="table table-bordered mb-20">
+                                        <tbody>
+                                            {% for line in product.specification_json %}
+                                            <tr>
+                                                {% if line.__len__() == 1 %}
+                                                <td scope="row" colspan="2"> {{ line[0]}} </td>
+                                                {% else %}
+                                                <th scope="row"> {{ line[0]}} </th>
+                                                <td>{{line[1]}}</td>
+                                                {% endif %}
+                                                
+                                                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                                
+                            </div> <!-- End Product Details Tab Content Singel -->
+                            <!-- Start Product Details Tab Content Singel -->
+                            <div class="tab-pane" id="specification">
+                                
+                            </div> <!-- End Product Details Tab Content Singel -->
+                            
+                        </div>
+                    </div> <!-- End Product Details Tab Content -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End Product Content Tab Section -->
 {% endblock %}

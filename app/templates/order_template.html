@@ -1,15 +1,10 @@
-﻿{% extends "front_base.html" %}
-
-{% block title %}我的购物车{% endblock %}
-
-{% block page_content %}
 <!-- ...:::: Start Cart Section:::... -->
 <div class="cart-section">
     <!-- Start Cart Table -->
     <div class="cart-table-wrapper" main.product", id=1>
         <div class="container">
             <div class="row">
-                <h3 class="breadcrumb-title" style="margin-top: 50px;">购物车</h3>
+                <h3 class="breadcrumb-title" style="margin-top: 50px;">订单#{{order.id}}</h3>
                 <div class="col-12">
                     <div class="table_desc">
                         <div class="table_page table-responsive">
@@ -25,18 +20,18 @@
                                     </tr>
                                 </thead> <!-- End Cart Table Head -->
                                 <tbody>
-                                    {% for cart_product in current_user.cart_products.all() %}
-                                    {% set product = cart_product.product %}
+                                    {% for op in order.products.all() %}
+                                    {% set product = op.product %}
                                     <!-- Start Cart Single Item-->
                                     <tr>
                                         <td class="product_thumb"><a href="{{url_for('main.product', id=product.id)}}"><img
                                                     src="{{product.image_url()}}" alt=""></a></td>
                                         <td class="product_name"><a href="{{url_for('main.product', id=product.id)}}">{{product.name}}</a></td>
-                                        <td class="product-price">￥{{product.price}}</td>
+                                        <td class="product-price">￥{{op.price}}</td>
                                         <td class="product_quantity">
-                                    <span class="cart-product-count">{{ cart_product.count }}</span>
+                                    <span class="cart-product-count">{{ op.count }}</span>
                                             </td>
-                                        <td class="product_total">￥{{ cart_product.count * product.price }}</td>
+                                        <td class="product_total">￥{{ op.count * op.price }}</td>
                                     </tr> <!-- End Cart Single Item-->
                                     {% endfor %}
                                 </tbody>
@@ -53,37 +48,26 @@
     <div class="coupon_area">
         <div class="container">
             <div class="row">
-                <!-- <div class="col-lg-6 col-md-6">
-                    <div class="coupon_code left" main.product", id=1>
-                        <h3>Coupon</h3>
+                <div class="col-lg-12 col-md-6">
+                    <div class="coupon_code right" style="margin-top: 10px;">
+                        <h3>详情</h3>
                         <div class="coupon_inner">
-                            <p>Enter your coupon code if you have one.</p>
-                            <input placeholder="Coupon code" type="text">
-                            <button type="submit">Apply coupon</button>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- 占位 -->
-                <div class="col-lg-6 col-md-6"></div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="coupon_code right" main.product", id=1>
-                        <h3>总价</h3>
-                        <div class="coupon_inner">
-                            <form action="/cart" method="post" id="cart_form">
                             <div class="cart_subtotal">
-                                {{ form.csrf_token }}
-                                <p>{{ form.store.label.text }}</p>
-                                <p class="cart_amount">{{ form.store }}</p>
+                                <p>商品总价</p>
+                                <p class="cart_amount">￥{{ order.products_total_price }}</p>
                             </div>
-
+                            <div class="cart_subtotal ">
+                                <p>运费</p>
+                                <p class="cart_amount"> ￥{{ order.money or 0}}</p>
+                            </div>
                             <div class="cart_subtotal">
                                 <p>总金额</p>
-                                <p class="cart_amount">￥{{current_user.cart_total_price()}}</p>
+                                <p class="cart_amount">￥{{ order.products_total_price + (order.money or 0) }}</p>
                             </div>
-                            <div class="checkout_btn">
-                                <button onclick="documnet:cart_form.submit()">立刻下单</button>
+                            <div class="cart_subtotal">
+                                <p>配送地址:</p>
+                                <p class="cart_amount">{{ order.store.address}}</p>
                             </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -92,4 +76,3 @@
     </div> <!-- End Coupon Start -->
 
 </div> <!-- ...:::: End Cart Section:::... -->
-{% endblock %}
