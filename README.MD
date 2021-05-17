@@ -5,6 +5,9 @@
 ## NOTE
 删除docker日志 `cat /dev/null > /var/lib/docker/container/<container_id>/<container_id>-json.log`
 
+用qq邮箱发邮件需要修改flask-mail中的源代码
+加上 `host.ehlo()` 在`host.login`之前
+
 ## 开发环境搭建
 操作系统: Ubuntu  
 编程语言: python3  

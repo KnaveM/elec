@@ -32,7 +32,8 @@
                                         <td class="product_thumb"><a href="{{url_for('main.product', id=product.id)}}"><img
                                                     src="{{product.image_url()}}" alt=""></a></td>
                                         <td class="product_name"><a href="{{url_for('main.product', id=product.id)}}">{{product.name}}</a></td>
-                                        <td class="product-price">￥{{product.price}}</td>
+                                        <td class="product-price">
+                                            ￥{{product.price}}</td>
                                         <td class="product_quantity">
                                     <span class="cart-product-count">{{ cart_product.count }}</span>
                                             </td>
@@ -81,6 +82,7 @@
                                 <p class="cart_amount">￥{{current_user.cart_total_price()}}</p>
                             </div>
                             <div class="checkout_btn">
+                                <!-- 通过button提交form -->
                                 <button onclick="documnet:cart_form.submit()">立刻下单</button>
                             </div>
                             </form>

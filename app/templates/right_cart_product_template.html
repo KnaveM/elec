@@ -1,0 +1,30 @@
+<!-- 需要 product_id product_name product_price product_count -->
+<!-- 非必须 li_style li_id -->
+
+<li class="offcanvas-cart-item-single" id="{{ li_id | default("cart-product-template") }}" style="{{ li_style }}">
+    <div class="offcanvas-cart-item-block">
+        <div>
+        <a href="{% if product_id %}{{ url_for('main.product', id=product_id) }}{%endif%}" class="offcanvas-cart-item-image-link">
+            <img src="{{url_for('static', filename='assets/db/images/p'+str(product_id)+'_'+"1")}}" alt=""
+                class="offcanvas-cart-image" style="width: 80px; height: 80px;">
+        </a></div>
+        <div class="offcanvas-cart-item-content">
+            <span id="cart-product-id" hidden>{{ product_id }}</span>
+            <a href="{% if product_id %}{{ url_for('main.product', id=product_id) }}{%endif%}" class="offcanvas-cart-item-link">{{ product_name }}...</a>
+            <div class="offcanvas-cart-item-details">
+                <span class="offcanvas-cart-item-details-quantity">单价:</span>
+                <span class="offcanvas-cart-item-details-price">{{product_price}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas-cart-item-delete text-right col-1">
+        <!-- TODO: 增加数量的按钮 -->
+
+        <a onclick="onclick_reduce_product(this)" product="{{product_id}}"><img
+                style="width: 25px; height: 25px;"
+                src="{{url_for('static', filename='assets/images/reduce.png')}}"></a>
+        <span class="cart-product-count">{{ product_count }}</span>
+        <a onclick="onclick_add_product(this)" product="{{product_id}}"><img style="width: 25px; height: 25px;"
+                src="{{url_for('static', filename='assets/images/plus.png')}}"></a>
+    </div>
+</li>

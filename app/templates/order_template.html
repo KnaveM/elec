@@ -1,10 +1,32 @@
+{% if order.store.owner.id == current_user.id %}
+{% set isBuyer = 1 %}
+{% else %}
+{% set isBuyer = 0 %}
+{% endif %}
+
+
+
+
 <!-- ...:::: Start Cart Section:::... -->
-<div class="cart-section">
+<div class="cart-section" style="margin-bottom: 50px;">
     <!-- Start Cart Table -->
     <div class="cart-table-wrapper" main.product", id=1>
         <div class="container">
             <div class="row">
-                <h3 class="breadcrumb-title" style="margin-top: 50px;">订单#{{order.id}}</h3>
+                <div class="h3 breadcrumb-title" style="margin-top: 50px;">{% if isBuyer %}采购单{%else%}订单{% endif %}#<span id="order-id">{{order.id}}</span> {{ OrderStatus.to_str(order.status)}}  {% if isBuyer %}
+                    <!-- <a class="btn btn-success" style="float:right;" href="">立即支付</a> -->
+                        {% if order.status == OrderStatus.WAIT_PAYMENT %}
+                        <a class="btn btn-success" style="float:right;" href="{{ url_for('main.pay_purchase', id=order.id) }}">立即支付</a>
+                        {% elif order.status == OrderStatus.PENDING %}
+                        <a class="btn btn-success" style="float:right;" href="{{ url_for('main.finish_purchase', id=order.id) }}">确认收货</a>
+                        {%elif order.status == OrderStatus.WAIT_COMMENT %}
+                        <!-- <a class="btn btn-success" style="float:right;" href="{{ url_for('main.finish_purchase', id=order.id) }}">评价</a> -->
+                        {% endif %}
+                    {% else %}
+                        {% if order.status == OrderStatus.CREATED %}
+                        <a class="btn btn-danger" style="float: right;" href="{{ url_for('main.comfirm_order', id=order.id) }}">确认</a>
+                        {% endif %}
+                    {% endif %} </div>
                 <div class="col-12">
                     <div class="table_desc">
                         <div class="table_page table-responsive">
@@ -17,6 +39,9 @@
                                         <th class="product-price">单价</th>
                                         <th class="product_quantity">数量</th>
                                         <th class="product_total">总价</th>
+                                        {% if order.status == OrderStatus.PENDING %}
+                                        <th class="other_action"></th>
+                                        {% endif %}
                                     </tr>
                                 </thead> <!-- End Cart Table Head -->
                                 <tbody>
@@ -27,11 +52,18 @@
                                         <td class="product_thumb"><a href="{{url_for('main.product', id=product.id)}}"><img
                                                     src="{{product.image_url()}}" alt=""></a></td>
                                         <td class="product_name"><a href="{{url_for('main.product', id=product.id)}}">{{product.name}}</a></td>
-                                        <td class="product-price">￥{{op.price}}</td>
+                                        <!-- 商家可以修改单价 -->
+                                        <td class="product_quantity">{% if not isBuyer and order.status==OrderStatus.CREATED %}<label>￥</label><input product-id="{{ op.product_id }}" onchange="onchange_price(this)" style="width: 100px;" min="0" value="{{op.price}}" type="number">{%else%}￥{{op.price}}{% endif %}</td>
                                         <td class="product_quantity">
-                                    <span class="cart-product-count">{{ op.count }}</span>
+                                    <span class="cart-product-count" id="op-count-{{op.product_id}}">{{ op.count }}</span>
                                             </td>
-                                        <td class="product_total">￥{{ op.count * op.price }}</td>
+                                        <td class="product_total">￥<span id="op-total-price-{{op.product_id}}">{{ op.count * op.price }}</span></td>
+
+
+                                        {% if order.status == OrderStatus.PENDING %}
+                                        <!-- 退货操作 -->
+                                        <!-- <td></td> -->
+                                        {% endif %}
                                     </tr> <!-- End Cart Single Item-->
                                     {% endfor %}
                                 </tbody>
@@ -54,20 +86,35 @@
                         <div class="coupon_inner">
                             <div class="cart_subtotal">
                                 <p>商品总价</p>
-                                <p class="cart_amount">￥{{ order.products_total_price }}</p>
+                                <p class="cart_amount">￥<span id="product-total-price" style="margin:0px">{{ order.products_total_price }}</span></p>
                             </div>
                             <div class="cart_subtotal ">
                                 <p>运费</p>
-                                <p class="cart_amount"> ￥{{ order.money or 0}}</p>
+                                <p class="cart_amount"> {% if not isBuyer and  order.status==OrderStatus.CREATED %} <label>￥</label><input onchange="onchange_delivery(this)" style="width: 100px;" min="0" value="{{ order.money or 0}}" type="number">{% else %}￥{{ order.money or 0}}{% endif %}</p>
                             </div>
                             <div class="cart_subtotal">
                                 <p>总金额</p>
-                                <p class="cart_amount">￥{{ order.products_total_price + (order.money or 0) }}</p>
+                                <p class="cart_amount">￥<span id="total-price" style="margin:0px">{{ order.products_total_price + (order.money or 0) }}</span></p>
+                            </div>
+                            <div class="cart_subtotal">
+                                <p>店名:</p>
+                                <p class="cart_amount">{{ order.store.name}}</p>
+                            </div>
+                            <div class="cart_subtotal">
+                                <p>联系人:</p>
+                                <p class="cart_amount">{{ order.store.contact }} {{ order.store.phone }}</p>
                             </div>
                             <div class="cart_subtotal">
                                 <p>配送地址:</p>
                                 <p class="cart_amount">{{ order.store.address}}</p>
                             </div>
+                            {% if order.status >= OrderStatus.PENDING %}
+                            <!-- TODO:商家可填写<input><save_btn> 买家只读 -->
+                            <!-- <div class="cart_subtotal">
+                                <p>物流信息:</p>
+                                <p class="cart_amount"></p>
+                            </div> -->
+                            {% endif %}
                         </div>
                     </div>
                 </div>

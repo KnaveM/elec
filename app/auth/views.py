@@ -139,7 +139,8 @@ def logout():
 def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
-		user = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data)
+		# 自动以用户名创建工厂名
+		user = User(username=form.username.data, password=form.password.data, email=form.email.data, name=form.name.data, address=form.address.data, phone=form.phone.data, factory_name=form.name.data)
 		db.session.commit()
 
 		flash("您已成功注册，请登录")

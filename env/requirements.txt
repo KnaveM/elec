@@ -26,3 +26,4 @@ WTForms
 gunicorn
 gevent
 gevent-websocket
+faker

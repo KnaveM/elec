@@ -349,17 +349,7 @@ var doughnutChartConfig = {
 // Generate charts on load
 window.addEventListener('load', function(){
 	
-	var lineChart = document.getElementById('chart-line').getContext('2d');
-	window.myLine = new Chart(lineChart, lineChartConfig);
 	
-	var barChart = document.getElementById('chart-bar').getContext('2d');
-	window.myBar = new Chart(barChart, barChartConfig);
-	
-	var pieChart = document.getElementById('chart-pie').getContext('2d');
-	window.myPie = new Chart(pieChart, pieChartConfig);
-	
-	var doughnutChart = document.getElementById('chart-doughnut').getContext('2d');
-	window.myDoughnut = new Chart(doughnutChart, doughnutChartConfig);
 	
 
 });	

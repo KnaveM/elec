@@ -2,11 +2,82 @@
 
 {% block title %}设置{% endblock %}
 
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function onchange_form_input(obj) {
+        if (obj.value == "") obj.value = obj.checked;
+        var json_data = {"key": obj.id, "value": obj.value}
+        socket.emit("setting", json_data)
+    }
+
+    socket.on("setting", function(json_data) {
+        console.log("修改成功")
+        // alert("修改成功")
+    })
+
+</script>
+
+
+
+<script>
+activate_nav(6)
+</script>
+
+{% endblock %}
+
 {% block page_content %}
 <!-- 自己的账户信息 -->
 <!-- 网站的相关设置? -->
 
 <h1 class="app-page-title">设置</h1>
+
+<hr class="my-4">
+<div class="row g-4 settings-section">
+    <div class="col-12 col-md-4">
+        <h3 class="section-title" id="factory">工厂</h3>
+        <div class="section-intro">注册工厂并配置工厂信息</div>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="app-card app-card-settings shadow-sm p-4">
+
+            <div class="app-card-body">
+                {% if not current_user.factory.status %}
+                <div class="mb-2"><strong>状态:</strong>  <span class="badge bg-success">运营中</span></div>
+                <div class="mb-3">
+                    <label for="setting-input-2" class="form-label">店铺名称</label>
+                    <input type="text" class="form-control" id="factory-name" value="{{ current_user.factory.name }}" required onchange="onchange_form_input(this)">
+                </div>
+                <div class="mb-3">
+                    <label for="setting-input-2" class="form-label">地址</label>
+                    <input type="text" class="form-control" id="factory-address" value="{{ current_user.factory.address }}" required onchange="onchange_form_input(this)">
+                </div>
+                <div class="mb-3">
+                    <label for="setting-input-2" class="form-label">联系人</label>
+                    <input type="text" class="form-control" id="factory-contact" value="{{ current_user.factory.contact }}" required onchange="onchange_form_input(this)">
+                </div>
+                <div class="mb-3">
+                    <label for="setting-input-2" class="form-label">联系电话</label>
+                    <input type="text" class="form-control" id="factory-phone" value="{{ current_user.factory.phone }}" required onchange="onchange_form_input(this)">
+                </div>
+                {% else %}
+                <div class="row justify-content-between">
+                    <div class="col-auto"><strong>状态:</strong><span class="badge bg-warning">未认证</span></div>
+                    <div class="col-auto"><a class="btn app-btn-primary" href="#">点我认证</a></div>
+                </div>
+               
+                {% endif %}
+
+            </div>
+            <!--//app-card-body-->
+
+        </div>
+        <!--//app-card-->
+    </div>
+</div>
+<!--//row-->
+
 <hr class="mb-4">
 <div class="row g-4 settings-section">
     <div class="col-12 col-md-4">
@@ -17,11 +88,12 @@
         <div class="app-card app-card-settings shadow-sm p-4">
 
             <div class="app-card-body">
-                <form class="settings-form">
+                <form name="firstForm" class="settings-form" action="/back/updateUserInfo" method="GET">
                     <div class="mb-3">
                         <label for="setting-input-1" class="form-label">用户名<span class="ml-2"
                                 data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                                data-content="用户名用于登陆，注册后不可修改"><svg
+                                data-content="用户名用于登陆，注册后不可修改">
+                                <svg
                                     width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle"
                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
@@ -33,23 +105,24 @@
                         <input type="text" class="form-control" id="setting-input-1" value="{{ current_user.username}}" required readonly>
                     </div>
                     <!-- onchange 元素值改变且失去焦点时触发 -->
+                    <!-- type 用于设置约束? -->
                     <div class="mb-3">
                         <label for="setting-input-2" class="form-label">联系人</label>
-                        <input type="text" class="form-control" id="setting-input-2" value="{{ current_user.user_info.name}}" required>
+                        <input type="text" class="form-control" id="user-name" value="{{ current_user.user_info.name}}" required onchange="onchange_form_input(this)">
                     </div>
                     <div class="mb-3">
                         <label for="setting-input-3" class="form-label">电话</label>
-                        <input type="email" class="form-control" id="setting-input-3" value="{{current_user.user_info.phone}}">
+                        <input type="text" class="form-control" id="user-phone" onchange="onchange_form_input(this)"  value="{{current_user.user_info.phone}}">
                     </div>
                     <div class="mb-3">
                         <label for="setting-input-3" class="form-label">邮箱</label>
-                        <input type="email" class="form-control" id="setting-input-3" value="{{ current_user.user_info.email}}">
+                        <input type="email" class="form-control" id="user-email" onchange="onchange_form_input(this)" value="{{ current_user.user_info.email}}">
                     </div>
                     <div class="mb-3">
                         <label for="setting-input-3" class="form-label">地址</label>
-                        <input type="email" class="form-control" id="setting-input-3" value="{{current_user.user_info.address}}">
+                        <input type="text" class="form-control" id="user-address" onchange="onchange_form_input(this)" value="{{current_user.user_info.address}}">
                     </div>
-                    <!-- <button type="submit" class="btn app-btn-primary">Save Changes</button> -->
+                    <!-- <a type="submit" class="btn app-btn-primary" href="javascript:firstForm.submit()" value="保存修改">保存修改</a> -->
                 </form>
             </div>
             <!--//app-card-body-->
@@ -59,82 +132,31 @@
     </div>
 </div>
 <!--//row-->
+
 <hr class="my-4">
 <div class="row g-4 settings-section">
     <div class="col-12 col-md-4">
-        <h3 class="section-title">Plan</h3>
-        <div class="section-intro">Settings section intro goes here. Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit. <a href="help.html">Learn more</a></div>
-    </div>
-    <div class="col-12 col-md-8">
-        <div class="app-card app-card-settings shadow-sm p-4">
-
-            <div class="app-card-body">
-                <div class="mb-2"><strong>Current Plan:</strong> Pro</div>
-                <div class="mb-2"><strong>Status:</strong> <span class="badge bg-success">Active</span></div>
-                <div class="mb-2"><strong>Expires:</strong> 2030-09-24</div>
-                <div class="mb-4"><strong>Invoices:</strong> <a href="#">view</a></div>
-                <div class="row justify-content-between">
-                    <div class="col-auto">
-                        <a class="btn app-btn-primary" href="#">Upgrade Plan</a>
-                    </div>
-                    <div class="col-auto">
-                        <a class="btn app-btn-secondary" href="#">Cancel Plan</a>
-                    </div>
-                </div>
-
-            </div>
-            <!--//app-card-body-->
-
-        </div>
-        <!--//app-card-->
-    </div>
-</div>
-<!--//row-->
-<hr class="my-4">
-<div class="row g-4 settings-section">
-    <div class="col-12 col-md-4">
-        <h3 class="section-title">Data &amp; Privacy</h3>
-        <div class="section-intro">Settings section intro goes here. Morbi vehicula, est eget fermentum ornare. </div>
+        <h3 class="section-title">设置</h3>
+        <div class="section-intro">根据自己的需求与习惯来进行选择</div>
     </div>
     <div class="col-12 col-md-8">
         <div class="app-card app-card-settings shadow-sm p-4">
             <div class="app-card-body">
                 <form class="settings-form">
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="settings-checkbox-1" checked>
-                        <label class="form-check-label" for="settings-checkbox-1">
-                            Keep user app activity history
-                        </label>
-                    </div>
-                    <!--//form-check-->
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="settings-checkbox-2" checked>
-                        <label class="form-check-label" for="settings-checkbox-2">
-                            Keep user app preferences
-                        </label>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="settings-checkbox-3">
+                        <input class="form-check-input" type="checkbox" value="" id="order-auto-commit" onchange="onchange_form_input(this)" {% if current_user.user_info.configuration_json.get('order-auto-commit', False) %}checked{%endif%}>
                         <label class="form-check-label" for="settings-checkbox-3">
-                            Keep user app search history
+                            自动确认订单
                         </label>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="settings-checkbox-4">
-                        <label class="form-check-label" for="settings-checkbox-4">
-                            Lorem ipsum dolor sit amet
+                        <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="email-update" onchange="onchange_form_input(this)" {% if current_user.user_info.configuration_json.get('email-update', False) %}checked{%endif%}>
+                        <label class="form-check-label" for="settings-checkbox-2">
+                            邮件推送
                         </label>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="settings-checkbox-5">
-                        <label class="form-check-label" for="settings-checkbox-5">
-                            Aenean quis pharetra metus
-                        </label>
-                    </div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn app-btn-primary">Save Changes</button>
-                    </div>
+                    
+                    
                 </form>
             </div>
             <!--//app-card-body-->
@@ -146,8 +168,8 @@
 <hr class="my-4">
 <div class="row g-4 settings-section">
     <div class="col-12 col-md-4">
-        <h3 class="section-title">Notifications</h3>
-        <div class="section-intro">Settings section intro goes here. Duis velit massa, faucibus non hendrerit eget.
+        <h3 class="section-title">推送</h3>
+        <div class="section-intro">配置推送，当该事件发生时我们会第一时间通过邮件联系您
         </div>
     </div>
     <div class="col-12 col-md-8">
@@ -155,27 +177,12 @@
             <div class="app-card-body">
                 <form class="settings-form">
                     <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="settings-switch-1" checked>
-                        <label class="form-check-label" for="settings-switch-1">Project notifications</label>
+                        <input class="form-check-input" type="checkbox" id="update-on-new-order" onchange="onchange_form_input(this)" {% if current_user.user_info.configuration_json.get('update-on-new-order', False) %}checked{%endif%}>
+                        <label class="form-check-label" for="settings-switch-1">新订单</label>
                     </div>
                     <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="settings-switch-2">
-                        <label class="form-check-label" for="settings-switch-2">Web browser push notifications</label>
-                    </div>
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="settings-switch-3" checked>
-                        <label class="form-check-label" for="settings-switch-3">Mobile push notifications</label>
-                    </div>
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="settings-switch-4">
-                        <label class="form-check-label" for="settings-switch-4">Lorem ipsum notifications</label>
-                    </div>
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="settings-switch-5">
-                        <label class="form-check-label" for="settings-switch-5">Lorem ipsum notifications</label>
-                    </div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn app-btn-primary">Save Changes</button>
+                        <input class="form-check-input" type="checkbox" id="update-on-order-status-change" onchange="onchange_form_input(this)" {% if current_user.user_info.configuration_json.get('update-on-order-status-change', False) %}checked{%endif%}>
+                        <label class="form-check-label" for="settings-switch-2">订单状态更新</label>
                     </div>
                 </form>
             </div>

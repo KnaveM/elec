@@ -96,7 +96,7 @@
     <div class="product-catagory-wrapper">
         <div class="container">
             <div class="row">
-                {% for item in [(1, "冰箱"), (2, "空调"), (3, "电视"), (4, "扫地机器人")] %}
+                {% for item in [(1, "冰箱"), (2, "空调"), (3, "电视"), (4, "扫地机器人"), (5, "洗衣机"), (6, "电饭煲"), (7, "电磁炉"), (8, "电压力锅")] %}
                 {% set i = item[1] %}
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                     <!-- Start Product Catagory Single -->
@@ -146,7 +146,7 @@
                     <div class="tab-content tab-animate-zoom">
                         <div class="tab-pane show active" id="car_and_drive">
                             <div class="product-default-slider product-default-slider-4grids-1row">
-                                {% for product in new_products * 2%}
+                                {% for product in new_products%}
                                 {% set i = product.id%}
                                 <!-- Start Product Defautlt Single -->
                                 <div class="product-default-single border-around" style="height: 450px;">
@@ -155,16 +155,7 @@
                                             <img src="{{url_for('static', filename='assets/db/images/p'+str(i)+'_1')}}" alt=""
                                                 class="product-default-img img-fluid">
                                         </a>
-                                        <!-- <div class="product-action-icon-link">
-                                            <ul>
-                                                <li><a href="wishlist.html"><i class="icon-heart"></i></a></li>
-                                                <li><a href="compare.html"><i class="icon-repeat"></i></a></li>
-                                                <li><a href="#" data-toggle="modal" data-target="#modalQuickview"><i
-                                                            class="icon-eye"></i></a></li>
-                                                <li><a href="#" data-toggle="modal" data-target="#modalAddcart"><i
-                                                            class="icon-shopping-cart"></i></a></li>
-                                            </ul>
-                                        </div> -->
+                                        
                                     </div>
                                     <div class="product-default-content">
                                         <h6 class="product-default-link"><a href="{{ url_for("main.product", id=i) }}">{{ product.name }}</a></h6>
@@ -212,7 +203,7 @@
                     <div class="tab-content tab-animate-zoom">
                         <div class="tab-pane show active" id="car_and_drive">
                             <div class="product-default-slider product-default-slider-4grids-1row">
-                                {% for product in new_products * 2%}
+                                {% for product in hot_products%}
                                 {% set i = product.id%}
                                 <!-- Start Product Defautlt Single -->
                                 <div class="product-default-single border-around" style="height: 450px;">

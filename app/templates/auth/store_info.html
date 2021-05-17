@@ -3,8 +3,15 @@
 {% block title %}修改物业信息{{ current_user.username }}{% endblock %}
 
 
+{% block scripts %}
+{{super()}}
+<script>
+activate_nav(3)
+</script>
+{% endblock %}
+
 {% block page_content %}
-<h1 class="app-page-title">添加新门店</h1>
+<h1 class="app-page-title">{% if isNew %}添加新门店{% else %}修改门店信息{% endif %}</h1>
 <hr class="mb-4">
 <div class="row g-4 settings-section">
     <div class="col-12 col-md-8">

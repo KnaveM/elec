@@ -1,0 +1,30 @@
+{% macro make_order_table(orders, OrderStatus, isBuyer=True) %}
+<!-- 不知道为啥, 一定要通过参数传递OrderStatus -->
+<table class="table app-table-hover mb-0 text-left">
+    <thead>
+        <tr>
+            <th class="cell">订单编号</th>
+            <th class="cell">配送店名</th>
+            <th class="cell">下单日期</th>
+            <th class="cell">状态</th>
+            <th class="cell">总价</th>
+            <th class="cell"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td class="cell">#{{ order.id }}</td>
+            <td class="cell"><span class="truncate">{{ order.store.name }}</span></td>
+            <td class="cell"><span> {{ order.create_time | strftime }}</span></td>
+            <td class="cell"><span class="badge 
+                {% if order.status==OrderStatus.WAIT_PAYMENT %}bg-warning
+                {% elif order.status == OrderStatus.PENDING %}bg-danger
+                {%else%}bg-success{% endif %}">{{ OrderStatus.to_str(order.status) }}</span></td>
+            <td class="cell">￥{{ order.products_total_price }}</td>
+            <td class="cell"><a class="btn-sm app-btn-secondary" href="{% if isBuyer %}{{ url_for('main.purchase', id=order.id) }} {% else %} {{url_for('main.order', id=order.id)}} {% endif %}">查看详情</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

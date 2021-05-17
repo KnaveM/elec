@@ -36,7 +36,7 @@ def create_app(config_name='default'):
     @app.template_filter('strftime')
     def _jinja2_filter_datetime(date, fmt=None):
         from datetime import timedelta
-        output_date = date+timedelta(hours=8)
+        output_date = date #+timedelta(hours=8)
         if fmt is None:
             fmt = '%Y-%m-%d %H:%M:%S'
         return output_date.strftime(fmt)
@@ -49,4 +49,5 @@ def create_app(config_name='default'):
     from .back import back as back_blueprint
     app.register_blueprint(back_blueprint, url_prefix='/back')
     
+    print("app configaration finished")
     return app

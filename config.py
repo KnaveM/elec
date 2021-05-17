@@ -11,8 +11,22 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_COMMIT_TEARDOWN = True
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    # 邮箱配置
+
     SECRET_KEY = 'strongpassword'  # TODO: 设置一个密码
+
+    # 邮箱配置
+    # MAIL_DEBUG = False
+    # MAIL_USE_SSL = True
+    # MAIL_USE_TSL = False
+    # MAIL_SERVER = "smtp.qq.com"
+    # MAIL_PORT = 465
+    # MAIL_USERNAME = os.getenv("MAIL_USERNAME") or "ERROR_USERNAME"
+    # MAIL_PASSWORD = os.getenv("MAIL_PASSWORD") or "ERROR_PASSWORD"
+    # # 垃圾flask-mail 别用
+    # # 用qq邮箱需要修改flask-mail中的源文件内容
+    # MAIL_DEFAULT_SENDER = ('大商电器', os.getenv('MAIL_USERNAME'))
+
+
 
     @staticmethod
     def init_app(app):

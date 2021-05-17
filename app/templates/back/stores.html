@@ -2,6 +2,13 @@
 
 {% block title %}所有门店{% endblock %}
 
+{% block scripts %}
+{{super()}}
+<script>
+activate_nav(3)
+</script>
+{% endblock %}
+
 {% block page_content %}
 <!-- 门店也就是地址的列表 -->
 

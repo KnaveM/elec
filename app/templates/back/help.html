@@ -2,6 +2,13 @@
 
 {% block title %}帮助文档{% endblock %}
 
+{% block scripts %}
+{{super()}}
+<script>
+activate_nav(5)
+</script>
+{% endblock %}
+
 {% block page_content %}
 <!-- 帮助文档 -->
 <h1 class="app-page-title">Help Center</h1>

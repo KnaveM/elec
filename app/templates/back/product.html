@@ -1,0 +1,177 @@
+{% extends "back/base.html" %}
+{% import "back/product_wtf.html" as wtf %}
+{% block title %}{% if isNew %}添加新产品{% else %}修改产品信息{% endif %}{% endblock %}
+
+
+
+{% block page_content %}
+<h1 class="app-page-title">{% if isNew %}添加新产品{% else %}修改产品信息{% endif %}</h1>
+<hr class="mb-4">
+<div class="row g-4 settings-section">
+    <div class="col-12 col-md-8">
+        <div class="app-card app-card-settings shadow-sm p-4">
+
+            <div class="app-card-body">
+                {{ wtf.quick_form(form, isNew=isNew) }}
+                
+            </div>
+
+            <div style="display: none;">
+            <table class="col-12">
+                <tbody id="attributes">
+                    <tr class="form-group">
+                        <td><input class="form-control" id="price" name="price" type="text" value=""></td><td><span id="add" class="btn btn-warning" onclick="onclick_add_attribute(this)">添加属性</span></td>
+                    </tr>
+                    
+                </tbody>
+                
+            </table>
+            <span class="btn btn-warning" onclick="onclick_append_line()">添加行</span>
+            </div>
+            <!--//app-card-body-->
+
+        </div>
+        <!--//app-card-->
+    </div>
+</div>
+
+<div style="display: none;">
+<!-- 地址选择器 -->
+<div class="row g-4 settings-section">
+    <div class="col-12 col-md-8">
+        <div class="app-card app-card-settings shadow-sm p-4">
+
+            <div class="app-card-body">
+                <!-- 省市区三级联动 begin -->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"><i>*</i>所在地址</label>
+                    <div class="col-sm-3">
+                    <select name="input_province" id="input_province" class="form-control" >
+                    <option value="">--请选择--</option>
+                    </select>
+                    </div>
+                    <div class="col-sm-3">
+                    <select name="input_city" id="input_city" class="form-control">
+                    <option value=""></option>
+                    </select>
+                    </div>
+                    <div class="col-sm-3">
+                    <select name="input_area" id="input_area" class="form-control">
+                    <option value=""></option>
+                    </select>
+                    </div>
+                </div>
+                
+                <!-- 省市区三级联动 end-->
+            </div>
+            <!--//app-card-body-->
+
+        </div>
+        <!--//app-card-->
+    </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .help-block {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+    function onclick_add_attribute(obj) {
+        var input = document.createElement('input')
+        input.setAttribute("class", "form-control")
+        input.setAttribute("type", "text")
+        obj.before(input)
+        obj.style.setProperty("display", "none");
+    }
+
+    function onclick_append_line() {
+        var attributes = document.querySelectorAll("#attributes tr")
+        var last_line = attributes[attributes.length-1]
+        var add_line = 1;
+        for (input in last_line.querySelectorAll("input")) {
+            if (input.value=="") {
+                // alert("请不要留空")
+                console.log("test is true")
+                add_line = false;
+            }
+        }
+        if (add_line == 0) return;
+        var attributes_table = document.querySelector("#attributes")
+        var new_tr = document.createElement('tr')
+        new_tr.innerHTML = '<td><input class="form-control" id="price" name="price" type="text" value=""></td><td><span id="add" class="btn btn-warning" onclick="onclick_add_attribute(this)">添加属性</span></td>'
+        new_tr.setAttribute("class", "form-group")
+        attributes_table.append(new_tr)
+    }
+</script>
+
+<script>
+    activate_nav(4)
+</script>
+
+<script>
+    $("#name")[0].style.setProperty("height", "70px")
+    $("#subtitle")[0].style.setProperty("height", "120px")
+</script>
+
+
+<!-- 三级联动 begin -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/address.js') }}"></script>
+<script >
+    $(function () {
+        var html = "";
+        $("#input_city").append(html);
+        $("#input_area").append(html);
+        $.each(pdata, function (idx, item) {
+            if (parseInt(item.level) == 0) {
+                html += "<option value=" + item.code + " >" + item.names + "</option> ";
+            }
+        });
+        $("#input_province").append(html);
+
+        $("#input_province").change(function () {
+            if ($(this).val() == "") return;
+            $("#input_city option").remove();
+            $("#input_area option").remove();
+            //var code = $(this).find("option:selected").attr("exid");
+            var code = $(this).find("option:selected").val();
+            code = code.substring(0, 2);
+            var html = "<option value=''>--请选择--</option>";
+            $("#input_area option").append(html);
+            $.each(pdata, function (idx, item) {
+                if (parseInt(item.level) == 1 && code == item.code.substring(0, 2)) {
+                    html += "<option value=" + item.code + " >" + item.names + "</option> ";
+                }
+            });
+            $("#input_city ").append(html);
+        });
+
+        $("#input_city").change(function () {
+            if ($(this).val() == "") return;
+            $("#input_area option").remove();
+            var code = $(this).find("option:selected").val();
+            code = code.substring(0, 4);
+            var html = "<option value=''>--请选择--</option>";
+            $.each(pdata, function (idx, item) {
+                if (parseInt(item.level) == 2 && code == item.code.substring(0, 4)) {
+                    html += "<option value=" + item.code + " >" + item.names + "</option> ";
+                }
+            });
+            $("#input_area ").append(html);
+        });
+    });
+</script>
+<!-- 三级联动 end -->
+{% endblock %}
+

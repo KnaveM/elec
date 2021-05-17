@@ -12,6 +12,10 @@
         /*2倍行高,em是参照当前文字的实际文字大小*/
         /* letter-spacing: 5px; */
     }
+
+    .product-details-text .title {
+        line-height: 25px;
+    }
 </style>
 {% endblock %}
 
@@ -59,10 +63,12 @@
                 <div class="product-details-content-area" >
                     <!-- Start  Product Details Text Area-->
                     <div class="product-details-text">
-                        <h4 class="title">{{ product.name }}</h4>
+                        <div class="title">{{ product.name }}</div>
                         <span id="product-id" style="display: none;"> {{ product.id }}</span>
                         <div class="price">￥{{ product.price }}</div>
                         <p>{{ product.subtitle }}</p>
+                        <p><b>发货地址</b>: {{ product.factory.address }}</p>
+                        <div><a href="{{url_for('main.factory', id=product.factory_id)}}">{{product.factory.name}}</a></div>
                     </div> <!-- End  Product Details Text Area-->
                     <!-- Start Product Variable Area -->
                     <div class="product-details-variable">
@@ -77,7 +83,8 @@
                             </div>
 
                             <div class="product-add-to-cart-btn">
-                                <a href="#" data-toggle="modal" data-target="#modalAddcart" onclick="onclick_add_to_cart()">添加到购物车</a>
+                                <a href="#" data-toggle="modal" data-target="#modalAddcart" onclick="onclick_add_to_cart()" {% if current_user.is_authenticated and product.factory.owner.id==current_user.id %}style="pointer-events: none;"{% endif %}>添加到购物车</a>
+                                <!-- 无法添加自己的产品 -->
                             </div>
                         </div>
 
@@ -97,7 +104,7 @@
 </div> <!-- End Product Details Section -->
 
 <!-- Start Product Content Tab Section -->
-<div class="product-details-content-tab-section section-inner-bg section-top-gap-100">
+<div class="product-details-content-tab-section section-inner-bg">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -128,9 +135,9 @@
                                             {% for line in product.specification_json %}
                                             <tr>
                                                 {% if line.__len__() == 1 %}
-                                                <td scope="row" colspan="2"> {{ line[0]}} </td>
+                                                <th scope="row" colspan="2"> {{ line[0]}} </th>
                                                 {% else %}
-                                                <th scope="row"> {{ line[0]}} </th>
+                                                <td scope="row"> {{ line[0]}} </td>
                                                 <td>{{line[1]}}</td>
                                                 {% endif %}
                                                 

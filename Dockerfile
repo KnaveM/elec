@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 
 # EXPOSE 80 # EXPOSE 只有在启动时使用-P参数时有用
 
-# 设置flask环境变量 好像不需要了
+# 设置flask环境变量 好像不需要了 只能在生成镜像时设置
 # ENV FLASK_APP manage.py
 
 # gunicorn.conf.py中进行配置
@@ -20,7 +20,8 @@ CMD ["gunicorn", "manage:app", "--log-level=debug", "-c", "./gunicorn.conf.py"]
 # 构建镜像 只在最后测试的时候重新构建 其他情况直接bash添加
 # docker build -t 'testflask' .
 # 创建容器
-# docker run -d -p 80:80 -p 3306:3306 -v $(pwd)/:/Project/demo --name=flask testflask
+# docker run -d -p 80:80 -p 3306:3306 -v $(pwd)/:/Project/demo --name=flask -e MAIL_USERNAME=1105711978@qq.com -e MAIL_PASSWORD=shomufxjhbtpjbeg  testflask
+# 需要手动设置一下邮箱的环境变量
 
 # 创建数据库容器 每次重构flask都需要重构mysql
 # docker pull mysql

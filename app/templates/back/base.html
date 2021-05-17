@@ -9,7 +9,8 @@
 
 <meta name="description" content="">
 <!-- 网页icon -->
-<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="{{ url_for('static', filename='back/assets/images/app-logo.svg') }}">
+
 
 <!-- FontAwesome JS-->
 <script defer src="{{ url_for('static', filename='back/assets/plugins/fontawesome/js/all.min.js') }}""></script>
@@ -19,6 +20,15 @@
 {{ super() }}
 <!-- App CSS -->  
 <link id=" theme-style" rel="stylesheet" href="{{ url_for('static', filename='back/assets/css/portal.css') }}"">
+
+<script>
+	function activate_nav(no) {
+		$(".nav-item .active")[0].setAttribute("class", "nav-link")
+		var lis = $(".nav-item .nav-link")
+		lis[no].setAttribute("class", "nav-link active")
+	}
+</script>
+
 {% endblock %}
 
 {% block content %}
@@ -45,27 +55,21 @@
 					</div>
 					<!--//col-->
 					<!-- TODO:搜索后台的子功能 -->
-					<div class="app-search-box col">
+					<!-- <div class="app-search-box col">
 						<form class="app-search-form">
 							<input type="text" placeholder="Search..." name="search" class="form-control search-input">
 							<button type="submit" class="btn search-btn btn-primary" value="Search"><i
 									class="fas fa-search"></i></button>
 						</form>
-					</div>
+					</div> -->
 					<!--//app-search-box-->
 
 					<div class="app-utilities col-auto">
 						
 						<div class="app-utility-item">
-							<a href="{{ url_for('back.setting') }}" title="Settings">
+							<a href="{{ url_for('auth.logout') }}" title="Settings">
 
-								<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear icon"
-									fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd"
-										d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z" />
-									<path fill-rule="evenodd"
-										d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z" />
-								</svg>
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1618811237689" class="icon" viewBox="0 0 1024 1024" version="1.1" p-id="1139" width="200" height="200"><defs><style type="text/css"/></defs><path d="M768.43584 896a64 64 0 1 1 0 128H192.30784c-84.608 0-143.04-31.104-171.52-93.76-18.816-41.472-21.44-75.328-20.672-165.76L0.30784 736v-448c0-8 0-14.72-0.192-28.48-0.768-90.432 1.856-124.288 20.672-165.76C49.26784 31.104 107.69984 0 192.30784 0h576.128a64 64 0 1 1 0 128H192.30784c-37.952 0-49.216 6.016-55.04 18.688-7.808 17.28-9.728 42.752-9.152 111.68L128.30784 288v448c0 8.512 0 15.424-0.192 29.632-0.64 68.928 1.344 94.4 9.216 111.68 5.76 12.672 17.024 18.688 54.976 18.688h576.128z" p-id="1140" fill="#8a8a8a"/><path d="M761.65184 268.8a52.48 52.48 0 0 1 36.352 14.848L991.02784 476.16c9.728 9.728 15.36 23.04 15.36 36.352a51.2 51.2 0 0 1-15.36 36.352l-193.536 190.976a51.2 51.2 0 0 1-72.704-0.512 51.2 51.2 0 0 1 0.512-72.704l156.672-154.112-156.672-155.648a51.2 51.2 0 0 1 0-72.704 49.92 49.92 0 0 1 36.352-15.36z" p-id="1141" fill="#8a8a8a"/><path d="M435.50784 460.8h487.936c28.672 0 51.2 23.04 51.2 51.2 0 28.16-23.04 51.2-51.2 51.2H435.50784c-28.672 0-51.2-23.04-51.2-51.2 0-28.16 22.528-51.2 51.2-51.2z" p-id="1142" fill="#8a8a8a"/></svg>
 							</a>
 						</div>
 						<!--//app-utility-item-->
@@ -78,6 +82,8 @@
 			<!--//app-header-content-->
 		</div>
 		<!--//container-fluid-->
+
+		
 	</div>
 	<!--//app-header-inner-->
 
@@ -226,23 +232,9 @@
 					</li>
 
 					<!--//nav-item-->
-					<li class="nav-item">
+					
 
-						<a class="nav-link" href="{{ url_for('back.analysis')}}">
-							<span class="nav-icon">
-								<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bar-chart-line"
-									fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd"
-										d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z" />
-								</svg>
-							</span>
-							<span class="nav-link-text">统计报表</span>
-						</a>
-						<!--//nav-link-->
-					</li>
-					<!--//nav-item-->
-
-					<li class="nav-item">
+					<li class="nav-item" style="display: none;">
 
 						<a class="nav-link" href="{{ url_for('back.help_page') }}">
 							<span class="nav-icon">
@@ -282,21 +274,7 @@
 							</a>
 							<!--//nav-link-->
 						</li>
-						<!--//nav-item-->
-						<li class="nav-item">
-
-							<a class="nav-link" href="{{ url_for('back.subordinates') }}">
-								<span class="nav-icon">
-									<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-person"
-										fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd"
-											d="M12 1H4a1 1 0 0 0-1 1v10.755S4 11 8 11s5 1.755 5 1.755V2a1 1 0 0 0-1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z" />
-										<path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-									</svg>
-								</span>
-								<span class="nav-link-text">子账号管理</span>
-							</a>
-							<!--//nav-link-->
+						<!-- 子账号先不弄了吧 -->
 						</li>
 						<!--//nav-item-->
 					</ul>
@@ -315,6 +293,15 @@
 <div class="app-wrapper">
 	<div class="app-content pt-3 p-md-3 p-lg-4">
 		<div class="container-xl">
+			<!-- flash() -->
+		<div class="container">
+			{% for message in get_flashed_messages() %}
+			<div class="alert alert-warning">
+				<button class="btn" type="button" class="close" data-dismiss="alert">&times;</button>
+				{{message}}
+			</div>
+			{% endfor %}
+		</div>
 	{% block page_content %}
 
 	{% endblock %}

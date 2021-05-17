@@ -13,16 +13,18 @@ window.chartColors = {
 var randomDataPoint = function(){ return Math.round(Math.random()*10000)};
 
 
-//Chart.js Line Chart Example 
+//Chart.js Line Chart Example
+
+// 获取
 
 var lineChartConfig = {
 	type: 'line',
 
 	data: {
-		labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+		labels: ['六天前', '五天前', '四天前', '三天前', '前天', '昨天', '今天'],
 		
 		datasets: [{
-			label: 'Current week',
+			label: '近七日',
 			fill: false,
 			backgroundColor: window.chartColors.green,
 			borderColor: window.chartColors.green,
@@ -36,7 +38,7 @@ var lineChartConfig = {
 				randomDataPoint()
 			],
 		}, {
-			label: 'Previous week',
+			label: '上周',
 		    borderDash: [3, 5],
 			backgroundColor: window.chartColors.gray,
 			borderColor: window.chartColors.gray,
@@ -64,7 +66,7 @@ var lineChartConfig = {
 		},
 		
 		title: {
-			display: true,
+			display: false,
 			text: 'Chart.js Line Chart Example',
 			
 		}, 
@@ -85,9 +87,9 @@ var lineChartConfig = {
 	            //Ref: https://stackoverflow.com/questions/38800226/chart-js-add-commas-to-tooltip-and-y-axis
                 label: function(tooltipItem, data) {
 	                if (parseInt(tooltipItem.value) >= 1000) {
-                        return "$" + tooltipItem.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        return "￥" + tooltipItem.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     } else {
-	                    return '$' + tooltipItem.value;
+	                    return '￥' + tooltipItem.value;
                     }
                 }
             },
@@ -121,7 +123,7 @@ var lineChartConfig = {
 				ticks: {
 		            beginAtZero: true,
 		            userCallback: function(value, index, values) {
-		                return '$' + value.toLocaleString();   //Ref: https://stackoverflow.com/questions/38800226/chart-js-add-commas-to-tooltip-and-y-axis
+		                return '￥' + value.toLocaleString();   //Ref: https://stackoverflow.com/questions/38800226/chart-js-add-commas-to-tooltip-and-y-axis
 		            }
 		        },
 			}]
@@ -137,9 +139,9 @@ var barChartConfig = {
 	type: 'bar',
 
 	data: {
-		labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+		labels: ['六天前', '五天前', '四天前', '三天前', '前天', '昨天', '今天'],
 		datasets: [{
-			label: 'Orders',
+			label: '订单量',
 			backgroundColor: window.chartColors.green,
 			borderColor: window.chartColors.green,
 			borderWidth: 1,
@@ -164,7 +166,7 @@ var barChartConfig = {
 			align: 'end',
 		},
 		title: {
-			display: true,
+			display: false,
 			text: 'Chart.js Bar Chart Example'
 		},
 		tooltips: {
@@ -213,11 +215,11 @@ var barChartConfig = {
 // Generate charts on load
 window.addEventListener('load', function(){
 	
-	var lineChart = document.getElementById('canvas-linechart').getContext('2d');
-	window.myLine = new Chart(lineChart, lineChartConfig);
+	// var lineChart = document.getElementById('canvas-linechart').getContext('2d');
+	// window.myLine = new Chart(lineChart, lineChartConfig);
 	
-	var barChart = document.getElementById('canvas-barchart').getContext('2d');
-	window.myBar = new Chart(barChart, barChartConfig);
+	// var barChart = document.getElementById('canvas-barchart').getContext('2d');
+	// window.myBar = new Chart(barChart, barChartConfig);
 	
 
 });	
